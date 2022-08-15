@@ -30,3 +30,4 @@ std::string serialize_int64_t(void* ptr);
 std::string serialize_uint64_t(void* ptr);
 std::string serialize_double(void* ptr);
 std::string serialize_array(void* ptr, uint8_t type, uint32_t size);
+std::string serialize_string(std::string* str);

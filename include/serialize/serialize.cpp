@@ -109,3 +109,9 @@ std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
     }
     return serialized;
 }
+
+std::string serialize_string(std::string* str){
+    char c_str[str->length() + 1];
+    strcpy(c_str, str->c_str());
+    return serialize_array(c_str, CHAR, str->length());
+}

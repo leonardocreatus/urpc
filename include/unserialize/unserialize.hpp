@@ -31,4 +31,5 @@ void unserialize_int64_t(std::string str, void* ptr);
 void unserialize_uint64_t(std::string str, void* ptr);
 void unserialize_double(std::string str, void* ptr);
 void unserialize_array(std::string str, void* ptr, uint8_t type);
+void unserialize_string(std::string str, void* ptr);
 

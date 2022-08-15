@@ -10,14 +10,13 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Tue Aug  9 20:59:08 2022
+# Make data base, printed on Mon Aug 15 19:41:06 2022
 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
- 
 ?F = $(notdir $?)
 # environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
@@ -34,7 +33,7 @@ CURDIR := /Users/leonardobarbosa/Library/Mobile Documents/com~apple~CloudDocs/re
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"99f206782a767a6d08ad4d4418aea476.pt-br","_translationsConfigFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/99f206782a767a6d08ad4d4418aea476.pt-br/tcf.json","_cacheRoot":"/Users/leonardobarbosa/Library/Application Support/Code/clp/99f206782a767a6d08ad4d4418aea476.pt-br","_resolvedLanguagePackCoreLocation":"/Users/leonardobarbosa/Library/Application Support/Code/clp/99f206782a767a6d08ad4d4418aea476.pt-br/da76f93349a72022ca4670c1b84860304616aaa2","_corruptedFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/99f206782a767a6d08ad4d4418aea476.pt-br/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"89ebf7d0bb12d1282a52b02d65044dbc.pt-br","_translationsConfigFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br/tcf.json","_cacheRoot":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br","_resolvedLanguagePackCoreLocation":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br/6d9b74a70ca9c7733b29f0456fd8195364076dda","_corruptedFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br/corrupted.info","_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
 # makefile (from `makefile', line 2)
@@ -46,9 +45,9 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_CWD = /Users/leonardobarbosa
+VSCODE_CWD = /Users/leonardobarbosa/Library/Mobile Documents/com~apple~CloudDocs/repository
 # environment
-PATH = /Users/leonardobarbosa/.meteor:/Users/leonardobarbosa/.nvm/versions/node/v14.19.3/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/leonardobarbosa/Library/Android/sdk/tools:/Users/leonardobarbosa/Library/Android/sdk/platform-tools:/Users/leonardobarbosa/Library/Android/sdk/emulator:/Users/leonardobarbosa/Library/Android/sdk/tools:/Users/leonardobarbosa/Library/Android/sdk/platform-tools
+PATH = /Users/leonardobarbosa/.meteor:/Users/leonardobarbosa/.nvm/versions/node/v14.19.3/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/leonardobarbosa/Library/Android/sdk/tools:/Users/leonardobarbosa/Library/Android/sdk/platform-tools:/Users/leonardobarbosa/Library/Android/sdk/emulator:/Users/leonardobarbosa/Library/Android/sdk/tools:/Users/leonardobarbosa/Library/Android/sdk/platform-tools
 # environment
 NVM_BIN = /Users/leonardobarbosa/.nvm/versions/node/v14.19.3/bin
 # environment
@@ -58,9 +57,11 @@ ANDROID_HOME = /Users/leonardobarbosa/Library/Android/sdk
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.MxmdFc4iu4/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.tMTt5mEu0M/Listeners
 # automatic
 %F = $(notdir $%)
+# environment
+DISPLAY = /private/tmp/com.apple.launchd.CODMFyd8TM/org.xquartz:0
 # environment
 PWD = /Users/leonardobarbosa/Library/Mobile Documents/com~apple~CloudDocs/repository/urpc
 # environment
@@ -78,7 +79,7 @@ MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
 VSCODE_CLI = 1
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/leonardobarbosa/Library/Application Support/Code/CachedData/da76f93349a72022ca4670c1b84860304616aaa2
+VSCODE_CODE_CACHE_PATH = /Users/leonardobarbosa/Library/Application Support/Code/CachedData/6d9b74a70ca9c7733b29f0456fd8195364076dda
 # environment
 LOGNAME = leonardobarbosa
 # environment
@@ -108,7 +109,7 @@ USER = leonardobarbosa
 # makefile
 .DEFAULT_GOAL := app
 # environment
-TERM_SESSION_ID = A28F3B28-D016-4A60-8247-9B9F2C1E79FC
+TERM_SESSION_ID = 299DB847-2B50-4E98-9BF8-69F9899EAD92
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # default
@@ -124,7 +125,7 @@ TMPDIR = /var/folders/1z/rdyj33k113qc6hrc4zkwjll80000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/leonardobarbosa/Library/Application Support/Code/1.70.0-main.sock
+VSCODE_IPC_HOOK = /Users/leonardobarbosa/Library/Application Support/Code/1.70.1-main.sock
 # environment
 MallocNanoZone = 0
 # makefile
@@ -138,7 +139,7 @@ TERM_PROGRAM_VERSION = 445
 # environment
 NVM_DIR = /Users/leonardobarbosa/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.32501246.32501252.202CF2D7-F907-41A9-A696-18574905D9D1
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.34237481.34237487.FD1C9B73-8C9D-44A1-AC85-DD559C6231F1
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -170,9 +171,9 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 62181
+VSCODE_PID = 34400
 # variable set hash-table stats:
-# Load=78/1024=8%, Rehash=0, Collisions=1/104=1%
+# Load=79/1024=8%, Rehash=0, Collisions=1/105=1%
 
 # Pattern-specific Variable Values
 
@@ -180,9 +181,9 @@ VSCODE_PID = 62181
 
 # Directories
 
-# . (device 16777231, inode 33733691): 9 files, no impossibilities.
+# . (device 16777229, inode 33733691): 11 files, no impossibilities.
 
-# 9 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -279,6 +280,7 @@ clean:
 # Not a target:
 include/serialize/serialize.hpp:
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -287,7 +289,6 @@ main.o: main.cpp serialize.o unserialize.o
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `makefile', line 10):
- 
 	@g++ ${CFLAGS} main.cpp  ${INC}
 	
 
@@ -325,6 +326,6 @@ unserialize.o: include/unserialize/unserialize.hpp include/unserialize/unseriali
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Aug  9 20:59:08 2022
+# Finished Make data base on Mon Aug 15 19:41:06 2022
 
  

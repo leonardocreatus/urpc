@@ -128,9 +128,6 @@ void unserialize_double(std::string str, void* ptr){
 void unserialize_array(std::string str, void* ptr, uint8_t type) {
     std::string size_ss = str.substr(0, 32);
     std::string data_ss = str.substr(32, str.size());
-    // std::cout << "str: " << str << std::endl;
-    // std::cout << "size_ss: " << size_ss << std::endl;
-    // std::cout << "data_ss: " << data_ss << std::endl;
 
     uint32_t size = 0;
     unserialize_uint32_t(size_ss, &size);
@@ -139,48 +136,12 @@ void unserialize_array(std::string str, void* ptr, uint8_t type) {
         void* ptr_aux = (void*)((uint8_t*)ptr + i * (_map_type_to_size[type] / 8));
         map_type_to_unserialize[type](data_ss.substr(i * _map_type_to_size[type], _map_type_to_size[type]), ptr_aux);
     }
+}
 
-    // int it = 0;
-    // while(it < size) {
-    //     switch(type) {
-    //         case INT8_T:
-    //             unserialize_int8_t(data_ss.substr(it * 8, 8), (int8_t*)ptr + it);
-    //             break;
-    //         case UINT8_T:
-    //             unserialize_uint8_t(data_ss.substr(it * 8, 8), (uint8_t*)ptr + it);
-    //             break;
-    //         case CHAR:
-    //             unserialize_char(data_ss.substr(it * 8, 8), (char*)ptr + it);
-    //             break;
-    //         case BOOL:
-    //             unserialize_bool(data_ss.substr(it * 8, 8), (bool*)ptr + it);
-    //             break;
-    //         case INT16_T:
-    //             unserialize_int16_t(data_ss.substr(it * 16, 16), (int16_t*)ptr + it);
-    //             break;
-    //         case UINT16_T:
-    //             unserialize_uint16_t(data_ss.substr(it * 16, 16), (uint16_t*)ptr + it);
-    //             break;
-    //         case INT32_T:
-    //             unserialize_int32_t(data_ss.substr(it * 32, 32), (int32_t*)ptr + it);
-    //             break;
-    //         case UINT32_T:
-    //             unserialize_uint32_t(data_ss.substr(it * 32, 32), (uint32_t*)ptr + it);
-    //             break;
-    //         case FLOAT:
-    //             unserialize_float(data_ss.substr(it * 32, 32), (float*)ptr + it);
-    //             break;
-    //         case INT64_T:
-    //             unserialize_int64_t(data_ss.substr(it * 64, 64), (int64_t*)ptr + it);
-    //             break;
-    //         case UINT64_T:
-    //             unserialize_uint64_t(data_ss.substr(it * 64, 64), (uint64_t*)ptr + it);
-    //             break;
-    //         case DOUBLE:
-    //             unserialize_double(data_ss.substr(it * 64, 64), (double*)ptr + it);
-    //             break;
-    //     }
-    //     it++;
-    // }
-
+void unserialize_string(std::string str, void* ptr){
+    int size = (str.length() - 32) / 8;
+    char cstr[size + 1];
+    unserialize_array(str, cstr, CHAR);
+    
+    *(std::string*)ptr = std::string(cstr);
 }
