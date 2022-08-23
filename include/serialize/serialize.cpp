@@ -1,20 +1,5 @@
 #include "serialize.hpp"
 
-std::map<uint8_t, std::function<std::string(void*)>> map_type_to_serialize = {
-    {INT8_T, serialize_int8_t},
-    {UINT8_T, serialize_uint8_t},
-    {CHAR, serialize_char},
-    {BOOL, serialize_bool},
-    {INT16_T, serialize_int16_t},
-    {UINT16_T, serialize_uint16_t},
-    {INT32_T, serialize_int32_t},
-    {UINT32_T, serialize_uint32_t},
-    {FLOAT, serialize_float},
-    {INT64_T, serialize_int64_t},
-    {UINT64_T, serialize_uint64_t},
-    {DOUBLE, serialize_double}
-};
-
 std::map<uint8_t, uint8_t> map_type_to_size = {
     {INT8_T, 8},
     {UINT8_T, 8},
@@ -28,6 +13,21 @@ std::map<uint8_t, uint8_t> map_type_to_size = {
     {INT64_T, 64},
     {UINT64_T, 64},
     {DOUBLE, 64}
+};
+
+std::map<uint8_t, std::function<std::string(void*)>> map_type_to_serialize = {
+    {INT8_T, serialize_int8_t},
+    {UINT8_T, serialize_uint8_t},
+    {CHAR, serialize_char},
+    {BOOL, serialize_bool},
+    {INT16_T, serialize_int16_t},
+    {UINT16_T, serialize_uint16_t},
+    {INT32_T, serialize_int32_t},
+    {UINT32_T, serialize_uint32_t},
+    {FLOAT, serialize_float},
+    {INT64_T, serialize_int64_t},
+    {UINT64_T, serialize_uint64_t},
+    {DOUBLE, serialize_double}
 };
 
 std::string serialize_int8_t(void* ptr){
@@ -110,7 +110,8 @@ std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
     return serialized;
 }
 
-std::string serialize_string(std::string* str){
+std::string serialize_string(void* ptr){
+    std::string* str = (std::string*)ptr;
     char c_str[str->length() + 1];
     strcpy(c_str, str->c_str());
     return serialize_array(c_str, CHAR, str->length());

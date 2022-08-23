@@ -6,11 +6,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
-make: *** No rule to make target `all'.  Stop.
 
-
-# Make data base, printed on Mon Aug 15 19:41:06 2022
+# Make data base, printed on Mon Aug 22 21:05:05 2022
 
 # Variables
 
@@ -33,7 +30,7 @@ CURDIR := /Users/leonardobarbosa/Library/Mobile Documents/com~apple~CloudDocs/re
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"89ebf7d0bb12d1282a52b02d65044dbc.pt-br","_translationsConfigFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br/tcf.json","_cacheRoot":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br","_resolvedLanguagePackCoreLocation":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br/6d9b74a70ca9c7733b29f0456fd8195364076dda","_corruptedFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/89ebf7d0bb12d1282a52b02d65044dbc.pt-br/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"8e7a008e83c664b9876a8f72ff0490ae.pt-br","_translationsConfigFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/tcf.json","_cacheRoot":"/Users/leonardobarbosa/Library/Application Support/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br","_resolvedLanguagePackCoreLocation":"/Users/leonardobarbosa/Library/Application Support/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/e4503b30fc78200f846c62cf8091b76ff5547662","_corruptedFile":"/Users/leonardobarbosa/Library/Application Support/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/corrupted.info","_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
 # makefile (from `makefile', line 2)
@@ -45,7 +42,7 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_CWD = /Users/leonardobarbosa/Library/Mobile Documents/com~apple~CloudDocs/repository
+VSCODE_CWD = /Users/leonardobarbosa
 # environment
 PATH = /Users/leonardobarbosa/.meteor:/Users/leonardobarbosa/.nvm/versions/node/v14.19.3/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/leonardobarbosa/Library/Android/sdk/tools:/Users/leonardobarbosa/Library/Android/sdk/platform-tools:/Users/leonardobarbosa/Library/Android/sdk/emulator:/Users/leonardobarbosa/Library/Android/sdk/tools:/Users/leonardobarbosa/Library/Android/sdk/platform-tools
 # environment
@@ -57,11 +54,11 @@ ANDROID_HOME = /Users/leonardobarbosa/Library/Android/sdk
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.tMTt5mEu0M/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.azfS755LEM/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
-DISPLAY = /private/tmp/com.apple.launchd.CODMFyd8TM/org.xquartz:0
+DISPLAY = /private/tmp/com.apple.launchd.arslkrRXTl/org.xquartz:0
 # environment
 PWD = /Users/leonardobarbosa/Library/Mobile Documents/com~apple~CloudDocs/repository/urpc
 # environment
@@ -79,7 +76,7 @@ MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
 VSCODE_CLI = 1
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/leonardobarbosa/Library/Application Support/Code/CachedData/6d9b74a70ca9c7733b29f0456fd8195364076dda
+VSCODE_CODE_CACHE_PATH = /Users/leonardobarbosa/Library/Application Support/Code/CachedData/e4503b30fc78200f846c62cf8091b76ff5547662
 # environment
 LOGNAME = leonardobarbosa
 # environment
@@ -109,7 +106,7 @@ USER = leonardobarbosa
 # makefile
 .DEFAULT_GOAL := app
 # environment
-TERM_SESSION_ID = 299DB847-2B50-4E98-9BF8-69F9899EAD92
+TERM_SESSION_ID = B297AE32-BB75-4FB2-B045-B93F5577A5C2
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # default
@@ -125,7 +122,7 @@ TMPDIR = /var/folders/1z/rdyj33k113qc6hrc4zkwjll80000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/leonardobarbosa/Library/Application Support/Code/1.70.1-main.sock
+VSCODE_IPC_HOOK = /Users/leonardobarbosa/Library/Application Support/Code/1.70.2-main.sock
 # environment
 MallocNanoZone = 0
 # makefile
@@ -139,7 +136,7 @@ TERM_PROGRAM_VERSION = 445
 # environment
 NVM_DIR = /Users/leonardobarbosa/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.34237481.34237487.FD1C9B73-8C9D-44A1-AC85-DD559C6231F1
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.36142435.36142445.1DFC9C1B-8BA3-45EE-9778-B597CE8529B4
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -171,7 +168,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 34400
+VSCODE_PID = 49034
 # variable set hash-table stats:
 # Load=79/1024=8%, Rehash=0, Collisions=1/105=1%
 
@@ -181,9 +178,9 @@ VSCODE_PID = 34400
 
 # Directories
 
-# . (device 16777229, inode 33733691): 11 files, no impossibilities.
+# . (device 16777229, inode 33733691): 12 files, no impossibilities.
 
-# 11 files, no impossibilities in 1 directories.
+# 12 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -272,6 +269,9 @@ include/unserialize/unserialize.hpp:
 clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
+make: *** No rule to make target `all'.  Stop.
+
 #  File has not been updated.
 #  commands to execute (from `makefile', line 22):
 	@rm -f main.o serialize.o unserialize.o
@@ -280,7 +280,6 @@ clean:
 # Not a target:
 include/serialize/serialize.hpp:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -326,6 +325,6 @@ unserialize.o: include/unserialize/unserialize.hpp include/unserialize/unseriali
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Mon Aug 15 19:41:06 2022
+# Finished Make data base on Mon Aug 22 21:05:05 2022
 
  

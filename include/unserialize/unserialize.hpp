@@ -16,20 +16,22 @@
 #define INT64_T     0xA
 #define UINT64_T    0xB
 #define DOUBLE      0xC
+#define STRING      0xF + 0x3 
+#define STRUCT      0xE
 #define ARRAY       0xF
 
-void unserialize_int8_t(std::string str, void* ptr);
-void unserialize_uint8_t(std::string str, void* ptr);
-void unserialize_char(std::string str, void* ptr);
-void unserialize_bool(std::string str, void* ptr);
-void unserialize_int16_t(std::string str, void* ptr);
-void unserialize_uint16_t(std::string str, void* ptr);
-void unserialize_int32_t(std::string str, void* ptr);
-void unserialize_uint32_t(std::string str, void* ptr);
-void unserialize_float(std::string str, void* ptr);
-void unserialize_int64_t(std::string str, void* ptr);
-void unserialize_uint64_t(std::string str, void* ptr);
-void unserialize_double(std::string str, void* ptr);
-void unserialize_array(std::string str, void* ptr, uint8_t type);
-void unserialize_string(std::string str, void* ptr);
+void unserialize_int8_t(std::string& str, void* ptr);
+void unserialize_uint8_t(std::string& str, void* ptr);
+void unserialize_char(std::string& str, void* ptr);
+void unserialize_bool(std::string& str, void* ptr);
+void unserialize_int16_t(std::string& str, void* ptr);
+void unserialize_uint16_t(std::string& str, void* ptr);
+void unserialize_int32_t(std::string& str, void* ptr);
+void unserialize_uint32_t(std::string& str, void* ptr);
+void unserialize_float(std::string& str, void* ptr);
+void unserialize_int64_t(std::string& str, void* ptr);
+void unserialize_uint64_t(std::string& str, void* ptr);
+void unserialize_double(std::string& str, void* ptr);
+void unserialize_array(std::string& str, void* ptr, uint8_t type);
+void unserialize_string(std::string& str, void* ptr);
 
