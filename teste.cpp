@@ -14,7 +14,8 @@ int main(int argc, char** argv){
     strcpy(n, ss.c_str());
     // n[0] = n[1];
     // &n += 1;
-    n += 1;
+    // n += 1;
+    (char*)
     // b += 8;
     std::cout << n << std::endl;
 
