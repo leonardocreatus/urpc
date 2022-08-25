@@ -1,20 +1,5 @@
 #include "serialize.hpp"
 
-std::map<uint8_t, uint8_t> map_type_to_size = {
-    {INT8_T, 8},
-    {UINT8_T, 8},
-    {CHAR, 8},
-    {BOOL, 8},
-    {INT16_T, 16},
-    {UINT16_T, 16},
-    {INT32_T, 32},
-    {UINT32_T, 32},
-    {FLOAT, 32},
-    {INT64_T, 64},
-    {UINT64_T, 64},
-    {DOUBLE, 64}
-};
-
 std::map<uint8_t, std::function<std::string(void*)>> map_type_to_serialize = {
     {INT8_T, serialize_int8_t},
     {UINT8_T, serialize_uint8_t},
@@ -27,8 +12,13 @@ std::map<uint8_t, std::function<std::string(void*)>> map_type_to_serialize = {
     {FLOAT, serialize_float},
     {INT64_T, serialize_int64_t},
     {UINT64_T, serialize_uint64_t},
-    {DOUBLE, serialize_double}
+    {DOUBLE, serialize_double},
+    {STRING, serialize_string}
 };
+
+std::function<std::string(void*)> get_serialize_func(uint8_t type){
+    return map_type_to_serialize[type];
+}
 
 std::string serialize_int8_t(void* ptr){
     std::bitset<8> bits(*(int8_t*)ptr);
@@ -100,12 +90,26 @@ std::string serialize_double(void* ptr){
     return bits.to_string();
 }
 
+// std::string serialize_array(void* ptr, uint8_t type, uint32_t qtd){
+//     std::string serialized;
+//     serialized += serialize_uint32_t(&qtd);
+//     uint8_t size_of_type = get_size(type);
+//     std::function<std::string(void*)> func = get_serialize_func(type);
+
+//     for(int i = 0; i < qtd; i++){
+//         serialized += func((char*)ptr + i * get_size(type) / 8);
+//     }
+//     return serialized;
+// }
+
 std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
     std::string serialized;
     serialized += serialize_uint32_t(&size);
-
+    uint8_t size_of_type = get_size(type);
+    std::function<std::string(void*)> func = get_serialize_func(type);
     for(int i = 0; i < size; i++){
-        serialized += map_type_to_serialize[type]((char*)ptr + i * map_type_to_size[type] / 8);
+        std::cout << "i: " << i << std::endl;
+        serialized += func((char*)ptr + i * size_of_type / 8);
     }
     return serialized;
 }

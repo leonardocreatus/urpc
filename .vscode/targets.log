@@ -6,8 +6,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `all'.  Stop.
 
-# Make data base, printed on Wed Aug 24 20:09:04 2022
+
+# Make data base, printed on Wed Aug 24 20:32:56 2022
 
 # Variables
 
@@ -152,6 +155,7 @@ TMPDIR = /var/folders/1z/rdyj33k113qc6hrc4zkwjll80000gn/T/
 # environment
 VSCODE_IPC_HOOK = /Users/leonardobarbosa/Library/Application Support/Code/1.70.2-main.sock
 # environment
+ 
 VSCODE_GIT_ASKPASS_NODE = /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper
 # environment
 MallocNanoZone = 0
@@ -227,6 +231,12 @@ VSCODE_PID = 3470
 # Files
 
 # Not a target:
+include/tools/tools.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 all:
 #  Command-line target.
 #  Implicit rule search has been done.
@@ -235,7 +245,7 @@ all:
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-serialize.o: include/serialize/serialize.hpp include/serialize/serialize.cpp
+serialize.o: include/serialize/serialize.hpp include/serialize/serialize.cpp tools.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -244,26 +254,29 @@ serialize.o: include/serialize/serialize.hpp include/serialize/serialize.cpp
 	
 
 # Not a target:
+include/tools/tools.hpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 .SUFFIXES:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
-app: main.o serialize.o unserialize.o
+app: main.o serialize.o unserialize.o tools.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
-make: *** No rule to make target `all'.  Stop.
-
 #  File has not been updated.
 #  commands to execute (from `makefile', line 7):
-	@g++ main.o serialize.o unserialize.o -o ${EXEC} ${INC}
+	@g++ main.o serialize.o unserialize.o tools.o -o ${EXEC} ${INC}
 	
 
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-08-09 20:59:05
+#  Last modified 2022-08-24 20:32:54
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -297,7 +310,7 @@ run: app
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 19):
+#  commands to execute (from `makefile', line 22):
 	@./${EXEC}
 	
 
@@ -311,8 +324,8 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 22):
-	@rm -f main.o serialize.o unserialize.o
+#  commands to execute (from `makefile', line 25):
+	@rm -f main.o serialize.o unserialize.o tools.o
 	
 
 # Not a target:
@@ -321,7 +334,7 @@ include/serialize/serialize.hpp:
 #  Modification time never checked.
 #  File has not been updated.
 
-main.o: main.cpp serialize.o unserialize.o
+main.o: main.cpp serialize.o unserialize.o tools.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -333,8 +346,8 @@ cleanall:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `makefile', line 25):
-	@rm -f main.o serialize.o unserialize.o app ${EXEC}
+#  commands to execute (from `makefile', line 28):
+	@rm -f main.o serialize.o unserialize.o tools.o app ${EXEC}
 	
 
 All: app
@@ -342,7 +355,16 @@ All: app
 #  Modification time never checked.
 #  File has not been updated.
 
-unserialize.o: include/unserialize/unserialize.hpp include/unserialize/unserialize.cpp
+tools.o: include/tools/tools.hpp include/tools/tools.cpp
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+ 
+#  File has not been updated.
+#  commands to execute (from `makefile', line 19):
+	@g++ ${CFLAGS} include/tools/tools.cpp
+	
+
+unserialize.o: include/unserialize/unserialize.hpp include/unserialize/unserialize.cpp tools.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -351,7 +373,7 @@ unserialize.o: include/unserialize/unserialize.hpp include/unserialize/unseriali
 	
 
 # files hash-table stats:
-# Load=17/1024=2%, Rehash=0, Collisions=1/41=2%
+# Load=20/1024=2%, Rehash=0, Collisions=1/50=2%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -363,6 +385,6 @@ unserialize.o: include/unserialize/unserialize.hpp include/unserialize/unseriali
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Aug 24 20:09:04 2022
+# Finished Make data base on Wed Aug 24 20:32:56 2022
 
  

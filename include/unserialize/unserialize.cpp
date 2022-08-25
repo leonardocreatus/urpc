@@ -1,6 +1,6 @@
 #include "unserialize.hpp"
 
-std::map<uint8_t, std::function<void(std::string& str, void*)>> map_type_to_unserialize= {
+std::map<uint8_t, std::function<void(std::string& str, void*)>> map_type_to_unserialize = {
     {INT8_T, unserialize_int8_t},
     {UINT8_T, unserialize_uint8_t},
     {CHAR, unserialize_char},
@@ -12,23 +12,14 @@ std::map<uint8_t, std::function<void(std::string& str, void*)>> map_type_to_unse
     {FLOAT, unserialize_float},
     {INT64_T, unserialize_int64_t},
     {UINT64_T, unserialize_uint64_t},
-    {DOUBLE, unserialize_double}
+    {DOUBLE, unserialize_double},
+    {STRING, unserialize_string}
 };
 
-std::map<uint8_t, uint8_t> _map_type_to_size = {
-    {INT8_T, 8},
-    {UINT8_T, 8},
-    {CHAR, 8},
-    {BOOL, 8},
-    {INT16_T, 16},
-    {UINT16_T, 16},
-    {INT32_T, 32},
-    {UINT32_T, 32},
-    {FLOAT, 32},
-    {INT64_T, 64},
-    {UINT64_T, 64},
-    {DOUBLE, 64}
-};
+std::function<void(std::string& str, void*)> get_unserialize_func(uint8_t type){
+    return map_type_to_unserialize[type];
+}
+
 
 void unserialize_int8_t(std::string& str, void* ptr){
     std::bitset<8> bitset_aux(str.substr(0, 8));
@@ -39,7 +30,6 @@ void unserialize_int8_t(std::string& str, void* ptr){
     int8_t value_is_int8_t = -static_cast<int8_t>(value_is_int8_t_unsigned);
     *(int8_t*)ptr = value_is_int8_t;
     str = str.substr(8, str.size()); 
-    printf("value_is_int8_t: %d\n", value_is_int8_t);
 }
 
 void unserialize_uint8_t(std::string& str, void* ptr){
@@ -47,7 +37,6 @@ void unserialize_uint8_t(std::string& str, void* ptr){
     uint8_t value = static_cast<uint8_t>(bitset_aux.to_ulong());
     *(uint8_t*)ptr = value;
     str = str.substr(8, str.size());
-    printf("unserialize_uint8_t: %d\n", value);
 }
 
 void unserialize_char(std::string& str, void* ptr){
@@ -55,7 +44,6 @@ void unserialize_char(std::string& str, void* ptr){
     char value = static_cast<char>(bitset_aux.to_ulong());
     *(char*)ptr = value;
     str = str.substr(8, str.size());
-    printf("unserialize_char: %c\n", value);
 }
 
 void unserialize_bool(std::string& str, void* ptr){
@@ -63,7 +51,6 @@ void unserialize_bool(std::string& str, void* ptr){
     bool value = static_cast<bool>(bitset_aux.to_ulong());
     *(bool*)ptr = value;
     str = str.substr(8, str.size());
-    printf("unserialize_bool: %d\n", value);
 }
 
 void unserialize_int16_t(std::string& str, void* ptr){
@@ -74,7 +61,6 @@ void unserialize_int16_t(std::string& str, void* ptr){
     int16_t value_is_int16_t = -static_cast<int16_t>(value_is_int16_t_unsigned);
     *(int16_t*)ptr = value_is_int16_t;
     str = str.substr(16, str.size());
-    printf("value_is_int16_t: %d\n", value_is_int16_t);
 }
 
 void unserialize_uint16_t(std::string& str, void* ptr){
@@ -82,7 +68,6 @@ void unserialize_uint16_t(std::string& str, void* ptr){
     uint16_t value = static_cast<uint16_t>(bitset_aux.to_ulong());
     *(uint16_t*)ptr = value;
     str = str.substr(16, str.size());
-    printf("unserialize_uint16_t: %d\n", value);
 }
 
 void unserialize_int32_t(std::string& str, void* ptr){
@@ -93,7 +78,6 @@ void unserialize_int32_t(std::string& str, void* ptr){
     int32_t value_is_int32_t = -static_cast<int32_t>(value_is_int32_t_unsigned);
     *(int32_t*)ptr = value_is_int32_t;
     str = str.substr(32, str.size());
-    printf("value_is_int32_t: %d\n", value_is_int32_t);
 }
 
 void unserialize_uint32_t(std::string& str, void* ptr){
@@ -153,36 +137,26 @@ void unserialize_double(std::string& str, void* ptr){
 void unserialize_array(std::string& str, void* ptr, uint8_t type) {
     std::string size_ss = str.substr(0, 32);
     
-
     uint32_t size = 0;
     unserialize_uint32_t(size_ss, &size);
-    printf("size array: %d\n", size);
-    std::string data_ss = str.substr(32, size * _map_type_to_size[type]);
+    uint8_t size_of_type = get_size(type);
+    std::string data_ss = str.substr(32, size * size_of_type);
+
+    std::function<void(std::string& str, void*)> func = get_unserialize_func(type);
 
     for(int i = 0; i < size; i++){
-        void* ptr_aux = (void*)((uint8_t*)ptr + i * (_map_type_to_size[type] / 8));
-        printf("ptr: %p\n", ptr);
-        // std::string data = data_ss.substr(i * _map_type_to_size[type], _map_type_to_size[type]);
-        map_type_to_unserialize[type](data_ss, ptr_aux);
+        void* ptr_aux = (void*)((uint8_t*)ptr + i * (size_of_type / 8));
+        func(data_ss, ptr_aux);
     }
-    printf("size: %u\n", size * _map_type_to_size[type] + 32);
-    str = str.substr(size * _map_type_to_size[type] + 32, str.size());
+
+    if(type == STRING){
+        void* ptr_aux = (void*)((uint8_t*)ptr + 1 + size * (size_of_type / 8));
+        *(uint8_t*)ptr_aux = '\0';
+    }
+
+    str = str.substr(size * size_of_type + 32, str.size());
 }
 
 void unserialize_string(std::string& str, void* ptr){
-    
-    // std::string size_ss = str.substr(0, 32);
-    
-    // uint32_t value = 0;
-    // unserialize_uint32_t(size_ss, &value);
-    // int sizeOfString = 32 + value * 8;
-
-    int size = (str.length() - 32) / 8;
-    // char cstr[size + 1];
-    std::string* ss = new std::string;
     unserialize_array(str, ptr, CHAR);
-    // *(std::string*)ptr = ;
-    
-    // *(std::string*)ptr = std::string(cstr);
-    // str = str.substr(sizeOfString, str.size());
 }
