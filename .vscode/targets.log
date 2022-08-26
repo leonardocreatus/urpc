@@ -6,11 +6,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
-make: *** No rule to make target `all'.  Stop.
 
-
-# Make data base, printed on Wed Aug 24 20:32:56 2022
+# Make data base, printed on Thu Aug 25 10:25:45 2022
 
 # Variables
 
@@ -71,9 +68,9 @@ SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.nBTyiK203m/Listeners
 # environment
 DISPLAY = /private/tmp/com.apple.launchd.cgtFhjaIEC/org.xquartz:0
 # environment
-TTY = /dev/ttys006
+TTY = /dev/ttys002
 # environment
-FIG_PID = 9243
+FIG_PID = 8932
 # environment
 PWD = /Users/leonardobarbosa/Library/Mobile Documents/com~apple~CloudDocs/repository/urpc
 # environment
@@ -127,7 +124,7 @@ USER = leonardobarbosa
 # environment
 FIG_TERM_VERSION = 5.1.0
 # environment
-TERM_SESSION_ID = 541D1657-8131-46D5-887B-5234705C7A85
+TERM_SESSION_ID = 26F04624-8229-4D38-8A96-F4960F49796B
 # environment
 LESS = -R
 # automatic
@@ -155,7 +152,6 @@ TMPDIR = /var/folders/1z/rdyj33k113qc6hrc4zkwjll80000gn/T/
 # environment
 VSCODE_IPC_HOOK = /Users/leonardobarbosa/Library/Application Support/Code/1.70.2-main.sock
 # environment
- 
 VSCODE_GIT_ASKPASS_NODE = /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper
 # environment
 MallocNanoZone = 0
@@ -170,7 +166,7 @@ TERM_PROGRAM_VERSION = 1.70.2
 # environment
 NVM_DIR = /Users/leonardobarbosa/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.36142435.36142445.C5919B02-EB08-4B2D-9573-D288E752EA29
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.36142435.36142445.E126A88A-3AB5-4266-94F2-C96536876843
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -210,7 +206,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 3470
+VSCODE_PID = 8522
 # variable set hash-table stats:
 # Load=98/1024=10%, Rehash=0, Collisions=5/124=4%
 
@@ -220,9 +216,9 @@ VSCODE_PID = 3470
 
 # Directories
 
-# . (device 16777229, inode 33733691): 14 files, no impossibilities.
+# . (device 16777229, inode 33733691): 15 files, no impossibilities.
 
-# 14 files, no impossibilities in 1 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -256,6 +252,7 @@ serialize.o: include/serialize/serialize.hpp include/serialize/serialize.cpp too
 # Not a target:
 include/tools/tools.hpp:
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -276,7 +273,7 @@ app: main.o serialize.o unserialize.o tools.o
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-08-24 20:32:54
+#  Last modified 2022-08-24 21:31:43
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -358,7 +355,6 @@ All: app
 tools.o: include/tools/tools.hpp include/tools/tools.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 #  commands to execute (from `makefile', line 19):
 	@g++ ${CFLAGS} include/tools/tools.cpp
@@ -385,6 +381,8 @@ unserialize.o: include/unserialize/unserialize.hpp include/unserialize/unseriali
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Aug 24 20:32:56 2022
+# Finished Make data base on Thu Aug 25 10:25:45 2022
 
  
+make: *** No rule to make target `all'.  Stop.
+

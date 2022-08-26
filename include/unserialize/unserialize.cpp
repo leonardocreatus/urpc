@@ -146,13 +146,14 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
 
     for(int i = 0; i < size; i++){
         void* ptr_aux = (void*)((uint8_t*)ptr + i * (size_of_type / 8));
+        std::cout << "data: " << data_ss << std::endl;
         func(data_ss, ptr_aux);
     }
 
-    if(type == STRING){
-        void* ptr_aux = (void*)((uint8_t*)ptr + 1 + size * (size_of_type / 8));
-        *(uint8_t*)ptr_aux = '\0';
-    }
+    // if(type == STRING){
+    //     void* ptr_aux = (void*)((uint8_t*)ptr + 1 + size * (size_of_type / 8));
+    //     *(uint8_t*)ptr_aux = '\0';
+    // }
 
     str = str.substr(size * size_of_type + 32, str.size());
 }
