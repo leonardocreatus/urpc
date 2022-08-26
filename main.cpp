@@ -95,7 +95,7 @@ int main(int argc, char** agrv){
     p.metadata.type_fields["father"] = STRUCT;
 
     p.metadata.ptr_fields["age"] = &p.age;
-    p.metadata.ptr_fields["name"] = &p.name;
+    p.metadata.ptr_fields["name"] = &p.name[0];
     
 
 
@@ -107,7 +107,7 @@ int main(int argc, char** agrv){
     p2.metadata.type_fields["age"] = UINT8_T;
     p2.metadata.type_fields["name"] = STRING;
     p2.metadata.ptr_fields["age"] = &p2.age;
-    p2.metadata.ptr_fields["name"] = &p2.name;
+    p2.metadata.ptr_fields["name"] = &p2.name[0];
 
     p.father = &p2;
 
@@ -131,6 +131,14 @@ int main(int argc, char** agrv){
     // printf("age: %d, name: %s\n", p2.age, p2.name.c_str());
 
     struct Person p3;
+    p3.name = "haha";
+
+    printf("pointer name: %p\n", &p3.name);
+    printf("pointer[0]: %p\n", &p3.name[0]);
+    printf("pointer[1]: %p\n", &p3.name[1]);
+    printf("pointer[2]: %p\n", &p3.name[2]);
+    printf("pointer[3]: %p\n", &p3.name[3]);
+
     p3.metadata.key_fields.push_back("age");
     p3.metadata.key_fields.push_back("name");
     p3.metadata.key_fields.push_back("father");
@@ -240,7 +248,7 @@ int main(int argc, char** agrv){
 
     printf("people pointer: %p\n", &p);
     printf("metadada pointer: %p\n", &p.metadata);
-    void* ptr = &p;
+    // void* ptr = &p;
 
     // int* iptr = static_cast<int*>(ptr);
 
