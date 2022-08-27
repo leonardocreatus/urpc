@@ -19,3 +19,4 @@ std::map<uint8_t, uint8_t> map_type_to_size = {
 uint8_t get_size(uint8_t type){
     return map_type_to_size[type];
 }
+

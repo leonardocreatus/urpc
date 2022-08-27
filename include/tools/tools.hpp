@@ -1,7 +1,17 @@
 #include <string>
 #include <functional>
+#ifndef TOOLS
+#define TOOLS
+
 #include <bitset>
 #include <map>
+#include <vector>
+
+struct metadatas {
+    std::vector<std::string> key_fields;
+    std::map<std::string, uint8_t> type_fields;
+    std::map<std::string, void*> ptr_fields;
+};
 
 #define INT8_T      0x1
 #define UINT8_T     0x2
@@ -20,3 +30,5 @@
 #define ARRAY       0xF
 
 uint8_t get_size(uint8_t type);
+
+#endif
