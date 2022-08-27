@@ -120,3 +120,18 @@ std::string serialize_string(void* ptr){
     strcpy(c_str, str->c_str());
     return serialize_array(c_str, CHAR, str->length());
 }
+
+std::string serialize_struct(struct metadatas* meta) {
+    std::string serialized = "";
+    for(auto fields : meta->key_fields) {
+        uint8_t type = meta->type_fields[fields];
+        void* ptr = meta->ptr_fields[fields];
+        if(type == STRUCT){
+            serialized += serialize_struct((struct metadatas*)ptr);
+        }else {
+            std::function<std::string(void*)> func = get_serialize_func(type);
+            serialized += func(ptr);
+        }
+    }
+    return serialized;
+}

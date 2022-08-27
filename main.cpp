@@ -8,65 +8,80 @@
 
 
 
-struct Person {
-    struct metadatas metadata;
-    uint8_t age;
-    std::string name;
-    struct Person* father;
+// struct Person {
+//     struct metadatas metadata;
+//     uint8_t age;
+//     std::string name;
+//     struct Person* father;
+// };
+
+
+class Person {
+    public:
+        struct metadatas metadata;
+        Person(uint8_t age, std::string name, Person* father) {
+            this->age = age;
+            this->name = name;
+            this->father = father;
+
+            metadata.key_fields.push_back("age");
+            metadata.key_fields.push_back("name");
+            metadata.key_fields.push_back("father");
+
+            metadata.type_fields["age"] = UINT8_T;
+            metadata.type_fields["name"] = STRING;
+            metadata.type_fields["father"] = STRUCT;
+
+            metadata.ptr_fields["age"] =  &this->age;
+            metadata.ptr_fields["name"] =  &this->name;
+            metadata.ptr_fields["father"] =  this->father;
+        }
+
+        Person(uint8_t age, std::string name) {
+            this->age = age;
+            this->name = name;
+
+            metadata.key_fields.push_back("age");
+            metadata.key_fields.push_back("name");
+
+            metadata.type_fields["age"] = UINT8_T;
+            metadata.type_fields["name"] = STRING;
+
+            metadata.ptr_fields["age"] =  &this->age;
+            metadata.ptr_fields["name"] =  &this->name;
+        }
+
+        uint8_t age;
+        std::string name;
+        Person* father;
 };
 
 
-// std::string serialize_struct_person(struct Person* person);
-// std::string serialize_struct(struct metadatas* meta);
-
-// std::string serialize_struct_person(struct Person* person){
-//     return serialize_struct(person->metadata);
-// }
-
-std::string serialize_struct(struct metadatas* meta) {
-    std::string serialized = "";
-    // std::cout << "serialize_struct" << std::endl;
-    // printf("meta->key_fields.size() = %lu\n", meta->key_fields.size());
-    // printf("meta pointer: %p\n", meta);
-    for(auto fields : meta->key_fields) {
-        // std::cout << "fields: " << fields << std::endl;
-        uint8_t type = meta->type_fields[fields];
-        void* ptr = meta->ptr_fields[fields];
-        printf("ptr: %p\n", ptr);
-
-        if(type == STRUCT){
-            // std::cout << "struct" << std::endl;
-            // printf("ptr: %p\n", ptr);
-            serialized += serialize_struct((struct metadatas*)ptr);
-            // serialized += serialize_struct_person((struct Person*)(ptr));
-        }else {
-            // std::cout << "not struct" << std::endl;
-            std::function<std::string(void*)> func = get_serialize_func(type);
-            serialized += func(ptr);
-        }
-    }
-    return serialized;
-}
-
-void unserialize_struct(std::string& serialized, struct metadatas* metadata) {
-    for(auto fields : metadata->key_fields) {
-        std::cout << "fields: " << fields << std::endl;
-        printf("ptr: %p\n", metadata->ptr_fields[fields]);
-        uint8_t type = metadata->type_fields[fields];
-        void* ptr = metadata->ptr_fields[fields];
-        if(type == STRUCT){
-            unserialize_struct(serialized, (struct metadatas*)ptr);
-            // struct Person* p = (struct Person*)ptr;
-            // unserialize_struct(serialized, p->metadata);
-        }else {
-            std::function<void(std::string& str, void*)> func = get_unserialize_func(type);
-            func(serialized, ptr);
-        }
-    }
-    
-}
-
 int main(int argc, char** agrv){
+
+    // Person* p = new Person(20, "John", NULL);
+    // Person p(20, "John", NULL);
+    // printf("pointer p: %p", &p);
+    // printf("pointer metdata: %p", &p.metadata);
+
+    // std::string serialized = serialize_struct(&p.metadata);
+    // std::cout << serialized << std::endl;
+
+    // Person p1(0, "", NULL);
+    // unserialize_struct(serialized, &p1.metadata);
+    // printf("name: %s\n", p1.name.c_str());
+    Person p1(40, "batata");
+    Person p(20, "John", &p1);
+
+    std::string serialized = serialize_struct(&p.metadata);
+    std::cout << serialized << std::endl;
+
+    Person p2(0, "");
+    Person p3(0, "", &p2);
+    unserialize_struct(serialized, &p3.metadata);
+    printf("name: %s\n", p3.name.c_str());
+    printf("name: %s\n", p3.father->name.c_str());
+
 
     // std::string ss = "batata";
     // std::string serialized = serialize_string(&ss);
@@ -77,93 +92,93 @@ int main(int argc, char** agrv){
     // std::cout << ss2 << std::endl;
     
 
-    struct Person p;
-    p.age = 10;
-    p.name = "pessoa 1";
+    // struct Person p;
+    // p.age = 10;
+    // p.name = "pessoa 1";
 
-    // struct metadatas meta1;
-    p.metadata.key_fields.push_back("age");
-    p.metadata.key_fields.push_back("name");
-    p.metadata.key_fields.push_back("father");
+    // // struct metadatas meta1;
+    // p.metadata.key_fields.push_back("age");
+    // p.metadata.key_fields.push_back("name");
+    // p.metadata.key_fields.push_back("father");
 
-    p.metadata.type_fields["age"] = UINT8_T;
-    p.metadata.type_fields["name"] = STRING;
-    p.metadata.type_fields["father"] = STRUCT;
+    // p.metadata.type_fields["age"] = UINT8_T;
+    // p.metadata.type_fields["name"] = STRING;
+    // p.metadata.type_fields["father"] = STRUCT;
 
-    p.metadata.ptr_fields["age"] = &p.age;
-    p.metadata.ptr_fields["name"] = &p.name[0];
+    // p.metadata.ptr_fields["age"] = &p.age;
+    // p.metadata.ptr_fields["name"] = &p.name[0];
     
 
 
-    struct Person p2;
-    p2.age = 20;
-    p2.name = "pessoa 2";
-    p2.metadata.key_fields.push_back("age");
-    p2.metadata.key_fields.push_back("name");
-    p2.metadata.type_fields["age"] = UINT8_T;
-    p2.metadata.type_fields["name"] = STRING;
-    p2.metadata.ptr_fields["age"] = &p2.age;
-    p2.metadata.ptr_fields["name"] = &p2.name[0];
+    // struct Person p2;
+    // p2.age = 20;
+    // p2.name = "pessoa 2";
+    // p2.metadata.key_fields.push_back("age");
+    // p2.metadata.key_fields.push_back("name");
+    // p2.metadata.type_fields["age"] = UINT8_T;
+    // p2.metadata.type_fields["name"] = STRING;
+    // p2.metadata.ptr_fields["age"] = &p2.age;
+    // p2.metadata.ptr_fields["name"] = &p2.name[0];
 
-    p.father = &p2;
-
-
-    p.metadata.ptr_fields["father"] = &p2;
-
-    printf("p.metadata.ptr_fields[\"father\"] = %p\n", p.metadata.ptr_fields["father"]);
-    printf("p.father = %p\n", p.father);
-    printf("p2 = %p\n", &p2);
-    printf("p.metadata.key_fields = %p\n", &p.metadata.key_fields);
-    printf("p.metadata.type_fields = %p\n", &p.metadata.type_fields);
-    printf("p.metadata.ptr_fields = %p\n", &p.metadata.ptr_fields);
-    printf("p.metadata.ptr_fields[\"age\"] = %p\n", &p.metadata.ptr_fields["age"]);
-    printf("p.metadata.ptr_fields[\"age\"] = %p\n", p.metadata.ptr_fields["age"]);
+    // p.father = &p2;
 
 
-    std::string serialized = serialize_struct(&p.metadata);
-    std::cout << serialized << std::endl;
+    // p.metadata.ptr_fields["father"] = &p2;
 
-    // unserialize_struct(serialized, &meta2);
-    // printf("age: %d, name: %s\n", p2.age, p2.name.c_str());
+    // printf("p.metadata.ptr_fields[\"father\"] = %p\n", p.metadata.ptr_fields["father"]);
+    // printf("p.father = %p\n", p.father);
+    // printf("p2 = %p\n", &p2);
+    // printf("p.metadata.key_fields = %p\n", &p.metadata.key_fields);
+    // printf("p.metadata.type_fields = %p\n", &p.metadata.type_fields);
+    // printf("p.metadata.ptr_fields = %p\n", &p.metadata.ptr_fields);
+    // printf("p.metadata.ptr_fields[\"age\"] = %p\n", &p.metadata.ptr_fields["age"]);
+    // printf("p.metadata.ptr_fields[\"age\"] = %p\n", p.metadata.ptr_fields["age"]);
 
-    struct Person p3;
-    p3.name = "haha";
 
-    printf("pointer name: %p\n", &p3.name);
-    printf("pointer[0]: %p\n", &p3.name[0]);
-    printf("pointer[1]: %p\n", &p3.name[1]);
-    printf("pointer[2]: %p\n", &p3.name[2]);
-    printf("pointer[3]: %p\n", &p3.name[3]);
+    // std::string serialized = serialize_struct(&p.metadata);
+    // std::cout << serialized << std::endl;
 
-    p3.metadata.key_fields.push_back("age");
-    p3.metadata.key_fields.push_back("name");
-    p3.metadata.key_fields.push_back("father");
-    p3.metadata.type_fields["age"] = UINT8_T;
-    p3.metadata.type_fields["name"] = STRING;
-    p3.metadata.type_fields["father"] = STRUCT;
+    // // unserialize_struct(serialized, &meta2);
+    // // printf("age: %d, name: %s\n", p2.age, p2.name.c_str());
 
-    p3.metadata.ptr_fields["age"] = &p3.age;
-    p3.metadata.ptr_fields["name"] = &p3.name;
+    // struct Person p3;
+    // p3.name = "haha";
+
+    // printf("pointer name: %p\n", &p3.name);
+    // printf("pointer[0]: %p\n", &p3.name[0]);
+    // printf("pointer[1]: %p\n", &p3.name[1]);
+    // printf("pointer[2]: %p\n", &p3.name[2]);
+    // printf("pointer[3]: %p\n", &p3.name[3]);
+
+    // p3.metadata.key_fields.push_back("age");
+    // p3.metadata.key_fields.push_back("name");
+    // p3.metadata.key_fields.push_back("father");
+    // p3.metadata.type_fields["age"] = UINT8_T;
+    // p3.metadata.type_fields["name"] = STRING;
+    // p3.metadata.type_fields["father"] = STRUCT;
+
+    // p3.metadata.ptr_fields["age"] = &p3.age;
+    // p3.metadata.ptr_fields["name"] = &p3.name;
     
 
 
-    struct Person p4;
-    p4.metadata.key_fields.push_back("age");
-    p4.metadata.key_fields.push_back("name");
+    // struct Person p4;
+    // p4.metadata.key_fields.push_back("age");
+    // p4.metadata.key_fields.push_back("name");
 
-    p4.metadata.type_fields["age"] = UINT8_T;
-    p4.metadata.type_fields["name"] = STRING;
+    // p4.metadata.type_fields["age"] = UINT8_T;
+    // p4.metadata.type_fields["name"] = STRING;
 
-    p4.metadata.ptr_fields["age"] = &p4.age;
-    p4.metadata.ptr_fields["name"] = &p4.name;
+    // p4.metadata.ptr_fields["age"] = &p4.age;
+    // p4.metadata.ptr_fields["name"] = &p4.name;
 
-    p3.metadata.ptr_fields["father"] = &p4;
-    p3.father = &p4;
+    // p3.metadata.ptr_fields["father"] = &p4;
+    // p3.father = &p4;
 
 
-    unserialize_struct(serialized, &p3.metadata);
-    printf("age: %d, name: %s\n", p3.age, p3.name.c_str());
-    printf("age: %d, name: %s\n", p3.father->age, p3.father->name.c_str());
+    // unserialize_struct(serialized, &p3.metadata);
+    // printf("age: %d, name: %s\n", p3.age, p3.name.c_str());
+    // printf("age: %d, name: %s\n", p3.father->age, p3.father->name.c_str());
 
 
     // p.metadata->key_fields.push_back("age");
@@ -242,8 +257,8 @@ int main(int argc, char** agrv){
     // printf("%d\n", b);
     // printf("%lld\n", y);
 
-    printf("people pointer: %p\n", &p);
-    printf("metadada pointer: %p\n", &p.metadata);
+    // printf("people pointer: %p\n", &p);
+    // printf("metadada pointer: %p\n", &p.metadata);
     // void* ptr = &p;
 
     // int* iptr = static_cast<int*>(ptr);

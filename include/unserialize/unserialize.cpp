@@ -165,3 +165,16 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
 void unserialize_string(std::string& str, void* ptr){
     unserialize_array(str, ptr, CHAR);
 }
+
+void unserialize_struct(std::string& serialized, struct metadatas* metadata) {
+    for(auto fields : metadata->key_fields) {
+        uint8_t type = metadata->type_fields[fields];
+        void* ptr = metadata->ptr_fields[fields];
+        if(type == STRUCT){
+            unserialize_struct(serialized, (struct metadatas*)ptr);
+        }else {
+            std::function<void(std::string& str, void*)> func = get_unserialize_func(type);
+            func(serialized, ptr);
+        }
+    }
+}
