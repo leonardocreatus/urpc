@@ -2,6 +2,7 @@
 #include <functional>
 #include <bitset>
 #include <iostream>
+#include <cstring>
 #include <map>
 #include "./../tools/tools.hpp"
 

@@ -80,8 +80,10 @@ int main(int argc, char** agrv){
     Person p2(0, "");
     Person p3(0, "", &p2);
     unserialize_struct(serialized, &p3.metadata);
-    printf("name: %s\n", p3.name.c_str());
-    printf("name: %s\n", p3.father->name.c_str());
+    std::cout << p3.name << std::endl;
+    std::cout << p3.father->name << std::endl;
+    // printf("name: %s\n", p3.name.c_str());
+    // printf("name: %s\n", p3.father->name.c_str());
 
 
     // std::string ss = "batata";

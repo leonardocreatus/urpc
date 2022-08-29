@@ -3,6 +3,7 @@
 #include <bitset>
 #include <iostream>
 #include <map>
+#include <cstring>
 #include "./../tools/tools.hpp"
 
 
