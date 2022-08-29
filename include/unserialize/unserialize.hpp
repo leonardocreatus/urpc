@@ -2,6 +2,7 @@
 #include <functional>
 #include <bitset>
 #include <iostream>
+#include <cstring>
 #include <map>
 #include "./../tools/tools.hpp"
 
@@ -21,4 +22,5 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type);
 void unserialize_string(std::string& str, void* ptr);
 
 std::function<void(std::string& str, void*)> get_unserialize_func(uint8_t type);
+void unserialize_struct(std::string& serialized, struct metadatas* metadata);
 

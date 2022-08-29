@@ -85,7 +85,6 @@ void unserialize_uint32_t(std::string& str, void* ptr){
     uint32_t value = static_cast<uint32_t>(bitset_aux.to_ulong());
     *(uint32_t*)ptr = value;
     str = str.substr(32, str.size());
-    printf("unserialize_uint32_t: %d\n", value);
 }
 
 void unserialize_float(std::string& str, void* ptr){
@@ -98,7 +97,6 @@ void unserialize_float(std::string& str, void* ptr){
     data._int = static_cast<uint32_t>(bitset_aux.to_ulong());;
     *(float*)ptr = data._float;
     str = str.substr(32, str.size());
-    printf("unserialize_float: %f\n", data._float);
 }
 
 void unserialize_int64_t(std::string& str, void* ptr){
@@ -109,7 +107,6 @@ void unserialize_int64_t(std::string& str, void* ptr){
     int64_t value_is_int64_t = -static_cast<int64_t>(value_is_int64_t_unsigned);
     *(int64_t*)ptr = value_is_int64_t;
     str = str.substr(64, str.size());
-    printf("unserialize_int64_t: %lld\n", value_is_int64_t);
 }
 
 void unserialize_uint64_t(std::string& str, void* ptr){
@@ -117,7 +114,6 @@ void unserialize_uint64_t(std::string& str, void* ptr){
     uint64_t value = static_cast<uint64_t>(bitset_aux.to_ulong());
     *(uint64_t*)ptr = value;
     str = str.substr(64, str.size());
-    printf("unserialize_uint64_t: %llu\n", value);
 }
 
 void unserialize_double(std::string& str, void* ptr){
@@ -130,7 +126,6 @@ void unserialize_double(std::string& str, void* ptr){
     data._int = static_cast<uint64_t>(bitset_aux.to_ulong());;
     *(double*)ptr = data._double;
     str = str.substr(64, str.size());
-    printf("unserialize_double: %f\n", data._double);
 }
 
 
@@ -146,22 +141,35 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
 
     for(int i = 0; i < size; i++){
         void* ptr_aux = (void*)((uint8_t*)ptr + i * (size_of_type / 8));
-        printf("pointer: %p\n", ptr_aux);
-        std::cout << "data: " << data_ss << std::endl;
         func(data_ss, ptr_aux);
     }
 
     if(type == CHAR){
         ((char*)ptr)[size] = '\0';
     }
-    // if(type == STRING){
-    //     void* ptr_aux = (void*)((uint8_t*)ptr + 1 + size * (size_of_type / 8));
-    //     *(uint8_t*)ptr_aux = '\0';
-    // }
 
     str = str.substr(size * size_of_type + 32, str.size());
 }
 
 void unserialize_string(std::string& str, void* ptr){
-    unserialize_array(str, ptr, CHAR);
+    std::string size_ss = str.substr(0, 32);
+    uint32_t size = 0;
+    unserialize_uint32_t(size_ss, &size);
+    char _ss[size + 1];
+    unserialize_array(str, _ss, CHAR);
+    std::string* ss = (std::string*)ptr;
+    ss->assign(_ss);
+}
+
+void unserialize_struct(std::string& serialized, struct metadatas* metadata) {
+    for(auto fields : metadata->key_fields) {
+        uint8_t type = metadata->type_fields[fields];
+        void* ptr = metadata->ptr_fields[fields];
+        if(type == STRUCT){
+            unserialize_struct(serialized, (struct metadatas*)ptr);
+        }else {
+            std::function<void(std::string& str, void*)> func = get_unserialize_func(type);
+            func(serialized, ptr);
+        }
+    }
 }

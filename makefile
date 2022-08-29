@@ -1,5 +1,5 @@
 EXEC = app
-CFLAGS = -c -std=c++20
+CFLAGS = -c -std=c++2a
 
 INC = -I ./include
 
