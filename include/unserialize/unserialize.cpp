@@ -163,7 +163,12 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
 }
 
 void unserialize_string(std::string& str, void* ptr){
-    unserialize_array(str, ptr, CHAR);
+    std::string size_ss = str.substr(0, 32);
+    uint32_t size = 0;
+    unserialize_uint32_t(size_ss, &size);
+    char* str_aux[size + 1];
+    unserialize_array(str, str_aux, CHAR);
+    strcpy((char*)ptr, (char*)str_aux);
 }
 
 void unserialize_struct(std::string& serialized, struct metadatas* metadata) {

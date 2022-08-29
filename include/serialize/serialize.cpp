@@ -108,7 +108,6 @@ std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
     uint8_t size_of_type = get_size(type);
     std::function<std::string(void*)> func = get_serialize_func(type);
     for(int i = 0; i < size; i++){
-        std::cout << "i: " << i << std::endl;
         serialized += func((char*)ptr + i * size_of_type / 8);
     }
     return serialized;
@@ -128,9 +127,13 @@ std::string serialize_struct(struct metadatas* meta) {
         void* ptr = meta->ptr_fields[fields];
         if(type == STRUCT){
             serialized += serialize_struct((struct metadatas*)ptr);
-        }else {
-            std::function<std::string(void*)> func = get_serialize_func(type);
-            serialized += func(ptr);
+        } else if(type == STRING){
+            serialized += serialize_string(ptr);
+        } else if(type > ARRAY){
+            // uint8_t _type = type - ARRAY;
+            // serialized += serialize_array(ptr, _type, );
+        } else{
+            serialized += get_serialize_func(type)(ptr);
         }
     }
     return serialized;

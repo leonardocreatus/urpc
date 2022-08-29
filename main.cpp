@@ -19,9 +19,10 @@
 class Person {
     public:
         struct metadatas metadata;
-        Person(uint8_t age, std::string name, Person* father) {
+        Person(uint8_t age, std::string name, Person* father ) {
             this->age = age;
             this->name = name;
+            
             this->father = father;
 
             metadata.key_fields.push_back("age");
