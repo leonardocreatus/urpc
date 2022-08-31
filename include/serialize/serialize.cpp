@@ -90,25 +90,17 @@ std::string serialize_double(void* ptr){
     return bits.to_string();
 }
 
-// std::string serialize_array(void* ptr, uint8_t type, uint32_t qtd){
-//     std::string serialized;
-//     serialized += serialize_uint32_t(&qtd);
-//     uint8_t size_of_type = get_size(type);
-//     std::function<std::string(void*)> func = get_serialize_func(type);
-
-//     for(int i = 0; i < qtd; i++){
-//         serialized += func((char*)ptr + i * get_size(type) / 8);
-//     }
-//     return serialized;
-// }
-
 std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
     std::string serialized;
     serialized += serialize_uint32_t(&size);
     uint8_t size_of_type = get_size(type);
     std::function<std::string(void*)> func = get_serialize_func(type);
     for(int i = 0; i < size; i++){
-        serialized += func((char*)ptr + i * size_of_type / 8);
+
+        void* ptr_to_type = (void*)((uint8_t*)ptr + i * get_size(type) / 8);
+        serialized += func(ptr_to_type);
+        // std::string ss = func((char*)ptr + i * get_size(type) / 8);
+        // serialized += ss;
     }
     return serialized;
 }
@@ -116,8 +108,35 @@ std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
 std::string serialize_string(void* ptr){
     std::string* str = (std::string*)ptr;
     char c_str[str->length() + 1];
+    std::cout << "size: " << str->length() << std::endl;
     strcpy(c_str, str->c_str());
     return serialize_array(c_str, CHAR, str->length());
+}
+
+std::string serialize_vector(void* ptr, uint8_t type){
+    std::string serialized;
+    if(type != CHAR){
+        switch(get_size(type)){
+            case 8: {
+                std::vector<uint8_t>* vc = (std::vector<uint8_t>*)ptr;
+                serialized += serialize_array(vc->data(), type, vc->size());
+            }; break;
+            case 16: {
+                std::vector<uint16_t>* vc = (std::vector<uint16_t>*)ptr;
+                serialized += serialize_array(vc->data(), type, vc->size());
+            }; break;
+            case 32: {
+                std::vector<uint32_t>* vc = (std::vector<uint32_t>*)ptr;
+                serialized += serialize_array(vc->data(), type, vc->size());
+            }; break;
+            case 64: {
+                std::vector<uint64_t>* vc = (std::vector<uint64_t>*)ptr;
+                serialized += serialize_array(vc->data(), type, vc->size());
+            }; break;
+        }
+    }
+
+    return serialized;
 }
 
 std::string serialize_struct(struct metadatas* meta) {
@@ -130,8 +149,7 @@ std::string serialize_struct(struct metadatas* meta) {
         } else if(type == STRING){
             serialized += serialize_string(ptr);
         } else if(type > ARRAY){
-            // uint8_t _type = type - ARRAY;
-            // serialized += serialize_array(ptr, _type, );
+            serialized += serialize_vector(ptr, type - ARRAY);
         } else{
             serialized += get_serialize_func(type)(ptr);
         }

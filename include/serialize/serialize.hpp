@@ -22,6 +22,7 @@ std::string serialize_uint64_t(void* ptr);
 std::string serialize_double(void* ptr);
 std::string serialize_array(void* ptr, uint8_t type, uint32_t size);
 std::string serialize_string(void* ptr);
+std::string serialize_vector(void* ptr, uint8_t type);
 
 std::function<std::string(void*)> get_serialize_func(uint8_t type);
 std::string serialize_struct(struct metadatas* meta);

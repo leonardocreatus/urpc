@@ -138,14 +138,42 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
     std::string data_ss = str.substr(32, size * size_of_type);
 
     std::function<void(std::string& str, void*)> func = get_unserialize_func(type);
+    void* p = ptr;
+
+    if(type != CHAR){
+        switch(get_size(type)){
+            case 8: {
+                std::vector<uint8_t>* vec = (std::vector<uint8_t>*)ptr;
+                vec->resize(size);
+                p = vec->data(); 
+            };
+            case 16: {
+                std::vector<uint16_t>* vec = (std::vector<uint16_t>*)ptr;
+                vec->resize(size);
+                p = vec->data(); 
+            }; break;
+            case 32: {
+                std::vector<uint32_t>* vec = (std::vector<uint32_t>*)ptr;
+                vec->resize(size);
+                p = vec->data(); 
+            }; break;
+            case 64: {
+                std::vector<uint64_t>* vec = (std::vector<uint64_t>*)ptr;
+                vec->resize(size);
+                p = vec->data(); 
+            }; break;
+        }
+    }
+
 
     for(int i = 0; i < size; i++){
-        void* ptr_aux = (void*)((uint8_t*)ptr + i * (size_of_type / 8));
+        void* ptr_aux = (void*)((uint8_t*)p + i * get_size(type) / 8);
         func(data_ss, ptr_aux);
+
     }
 
     if(type == CHAR){
-        ((char*)ptr)[size] = '\0';
+        ((char*)p)[size] = '\0';
     }
 
     str = str.substr(size * size_of_type + 32, str.size());
@@ -167,6 +195,9 @@ void unserialize_struct(std::string& serialized, struct metadatas* metadata) {
         void* ptr = metadata->ptr_fields[fields];
         if(type == STRUCT){
             unserialize_struct(serialized, (struct metadatas*)ptr);
+        } else if(type > ARRAY){
+            uint8_t type_of_array = type - ARRAY;
+            unserialize_array(serialized, ptr, type_of_array);
         }else {
             std::function<void(std::string& str, void*)> func = get_unserialize_func(type);
             func(serialized, ptr);
