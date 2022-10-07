@@ -69,6 +69,11 @@
     "functional": "cpp",
     "iterator": "cpp",
     "utility": "cpp",
-    "any": "cpp"
+    "any": "cpp",
+    "iomanip": "cpp",
+    "thread": "cpp",
+    "deque": "cpp",
+    "fstream": "cpp",
+    "stack": "cpp"
   }
 }

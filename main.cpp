@@ -1,6 +1,3 @@
-#include <serialize/serialize.hpp>
-#include <unserialize/unserialize.hpp>
-#include <tools/tools.hpp>
 #include <string>
 #include <iostream>
 #include <map>
@@ -10,117 +7,68 @@
 #include <any>
 #include <vector>
 
-
-class Value {
-    public:
-        struct metadatas metadata;
-        Value(float a, float b, float c){
-            values.push_back(a);
-            values.push_back(b);
-            values.push_back(c);
-
-            
-            metadata.key_fields.push_back("values");
-            metadata.type_fields["values"] = FLOAT + ARRAY;
-            metadata.ptr_fields["values"] = &values;
-        }
-
-        Value(){
-            metadata.key_fields.push_back("values");
-            metadata.type_fields["values"] = FLOAT + ARRAY;
-            metadata.ptr_fields["values"] = &values;
-        }
-
-        std::vector<float> values;
-};
-
-class Person {
-    public:
-        struct metadatas metadata;
-        Person(uint8_t age, std::string name, Value* value ) {
-            this->age = age;
-            this->name = name;
-            this->value = value;
-
-            metadata.key_fields.push_back("age");
-            metadata.key_fields.push_back("name");
-            metadata.key_fields.push_back("value");
-
-            metadata.type_fields["age"] = UINT8_T;
-            metadata.type_fields["name"] = STRING;
-            metadata.type_fields["value"] = STRUCT;
-
-            metadata.ptr_fields["age"] =  &this->age;
-            metadata.ptr_fields["name"] =  &this->name;
-            metadata.ptr_fields["value"] =  this->value;
-        }
-
-        Person() {
-            // this->age = age;
-            // this->name = name;
-            this->value = new Value();
-
-            metadata.key_fields.push_back("age");
-            metadata.key_fields.push_back("name");
-            metadata.key_fields.push_back("value");
-
-            metadata.type_fields["age"] = UINT8_T;
-            metadata.type_fields["name"] = STRING;
-            metadata.type_fields["value"] = STRUCT;
-
-            metadata.ptr_fields["age"] =  &this->age;
-            metadata.ptr_fields["name"] =  &this->name;
-            metadata.ptr_fields["value"] =  this->value;
-        }
-
-        uint8_t age;
-        std::string name;
-        Value* value;
-};
+#include "include/udp/server.hpp"
+#include "include/udp/client.hpp"
+#include "sum.hpp"
 
 
 
-// std::map<uint8_t, typename _Tp> map_type_to_value = {
-//     {INT8_T, int8_t},
-//     {UINT8_T, uint8_t},
-// };
-
+void print(std::string str, int size){
+    // for(int i = 0; i < size; i++){
+    //     printf("%02x\n", str[i]);
+    // }
+    // std::cout << str << std::endl;
+    // printf("serialize size: %d\n", str.size());
+    w
 int main(int argc, char** argv){
 
-    Value v(1.0, 2.0, 3.0);
-    Person p(10, "toto", &v);
-    std::string serialized = serialize_struct(&p.metadata);
-    std::cout << serialized << std::endl;
+    // std::vector<int32_t> values{1, 2, 3};
+    // Sum s1(values);
+    // std::string serialize = s1.serialize();
 
-    Person p2;
-    unserialize_struct(serialized, &p2.metadata);
-    printf("age: %d\n", p2.age);
-    printf("name: %s\n", p2.name.c_str());
-    std::cout << p2.name.c_str() << std::endl;
-    printf("value: %f\n", p2.value->values[0]);
-    printf("value: %f\n", p2.value->values[1]);
-    printf("value: %f\n", p2.value->values[2]);
+    // Sum s2;
+    // s2.deserialize(serialize);
+    // for(auto i : s2.values){
+    //     std::cout << i << std::endl;
+    // }
+
+    int port_server = atoi(argv[1]);
+    int port_client = atoi(argv[2]);
+
     
+    Client client;
+
+    Server server(port_server, [&client, port_client](std::string ss, int size) -> void{
+        // std::cout << "server: " << size << std::endl;
+        Sum s;
+        s.deserialize(ss);
+        int32_t sum = 0;
+        for(auto i : s.values){
+            sum += i;
+        }
+        std::cout << "sum: " << sum << std::endl;
+        s.values.clear();
+        if(size > 8){
+            s.values.push_back(sum);
+            client.request(s.serialize(), "127.0.0.1", port_client);
+        }
+    });
+
+    while(true){
+        std::cout << "Insira valores para somar ou 0 para sair e executar a soma remotamente ... " << std::endl;
+        std::vector<int32_t> values;
+        while(true){
+    
+            int value;
+            std::cin >> value;
+            if(value == 0){
+                break;
+            }
+            values.push_back(value);
+        }
+        Sum s1(values);
+        std::string serialize = s1.serialize();
+        client.request(serialize, "127.0.0.1", port_client);
+    }
 
 }                    
-
- 
-
-
-/*
-
-00000000000000000000000000000010
-11010000
-01110010
-
-00000000000000000000000000000010
-00000001
-00000010
-
-
-00000000000000000000000000001000
-00000000000000010000000000000000
-00000000000000100000000000000000
-00000000000000110000000000000000
-00000000000001000000000000000000
-*/

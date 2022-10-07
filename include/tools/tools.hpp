@@ -26,9 +26,10 @@ struct metadatas {
 #define UINT64_T    0xB
 #define DOUBLE      0xC
 #define STRING      0xF + 0x3 
-#define STRUCT      0xE
+#define OBJECT      0xE
 #define ARRAY       0xF
 
 uint8_t get_size(uint8_t type);
 
 #endif
+

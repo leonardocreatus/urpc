@@ -193,7 +193,7 @@ void unserialize_struct(std::string& serialized, struct metadatas* metadata) {
     for(auto fields : metadata->key_fields) {
         uint8_t type = metadata->type_fields[fields];
         void* ptr = metadata->ptr_fields[fields];
-        if(type == STRUCT){
+        if(type == OBJECT){
             unserialize_struct(serialized, (struct metadatas*)ptr);
         } else if(type > ARRAY){
             uint8_t type_of_array = type - ARRAY;
