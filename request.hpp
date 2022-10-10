@@ -1,5 +1,5 @@
-#ifndef SUM_HPP
-#define SUM_HPP
+#ifndef REQUEST_HPP
+#define REQUEST_HPP
 
 #include <string>
 #include <bitset>
@@ -9,17 +9,18 @@
 #include "include/serialize/serialize.hpp"
 #include "include/unserialize/unserialize.hpp"
 
-class Sum { 
+class Request { 
     public: 
         struct metadatas meta;
         
-        Sum(std::vector<int32_t> values);
-        Sum();
+        Request(uint8_t a, uint8_t b);
+        Request();
 
         std::string serialize();
         void deserialize(std::string data);
 
-        std::vector<int32_t> values;
+        uint8_t a;
+        uint8_t b;
 };
 
 #endif

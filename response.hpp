@@ -1,26 +1,25 @@
-#ifndef PERSON_HPP
-#define PERSON_HPP
+#ifndef RESPONSE_HPP
+#define RESPONSE_HPP
 
 #include <string>
 #include <bitset>
+#include <vector>
+
 #include "include/tools/tools.hpp"
 #include "include/serialize/serialize.hpp"
 #include "include/unserialize/unserialize.hpp"
 
-class Person { 
+class Response { 
     public: 
         struct metadatas meta;
-        Person(uint8_t age, std::string name, Person &father);
-        Person(uint8_t age, std::string name);
-        Person();
-        Person(Person& father);
+        
+        Response(uint16_t x);
+        Response();
 
         std::string serialize();
         void deserialize(std::string data);
 
-        uint8_t age;
-        std::string name;
-        Person* father;
+        uint16_t x;
 };
 
 #endif

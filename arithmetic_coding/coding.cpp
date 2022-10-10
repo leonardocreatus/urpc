@@ -13,27 +13,18 @@ std::string decode(std::string str) {
         symbol = decode_symbol(cum_freq);
         if (symbol == EOF_symbol) break;
         ch = index_to_char[symbol];
-        // std::cout << ch;
-        // putc(ch, stdout);
         out += ch;
         update_model(symbol);
     }
-
-    // return "";
     return out;
 }
 
 std::string encode(std::string str){
-
-
     start_model();
     start_outputing_bits();
     start_encoding();
-
-    
     for(auto i : str){
         int ch; int symbol;
-        //ch = getc(std::cin);
         ch = i;
         
         if (ch == EOF) break;
@@ -41,7 +32,6 @@ std::string encode(std::string str){
         encode_symbol(symbol, cum_freq);
         update_model(symbol);
     }
-
     encode_symbol(EOF_symbol, cum_freq);
     done_encoding();
     return done_outputing_bits();
