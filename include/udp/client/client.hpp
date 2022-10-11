@@ -17,6 +17,7 @@
 #include <functional>
 #include <map>
 #include <stdlib.h>
+#include <cstdlib>
 #include <algorithm>
 #include <fstream>
 #include <cmath>

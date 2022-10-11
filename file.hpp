@@ -1,25 +1,23 @@
-#ifndef RESPONSE_HPP
-#define RESPONSE_HPP
+#ifndef FILE_HPP
+#define FILE_HPP
 
 #include <string>
-#include <bitset>
-#include <vector>
 
 #include "include/tools/tools.hpp"
 #include "include/serialize/serialize.hpp"
 #include "include/unserialize/unserialize.hpp"
 
-class Response { 
-    public: 
+class File {
+    public:
         struct metadatas meta;
         
-        Response(uint64_t x);
-        Response();
-
+        File(std::string name);
+        File();
+        
         std::string serialize();
         void deserialize(std::string data);
-
-        uint64_t x;
+        
+        std::string name;
 };
 
 #endif

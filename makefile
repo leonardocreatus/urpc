@@ -5,16 +5,16 @@ INC = -I ./include
 
 all: server client
 
-server: mserver.o request.o serialize.o unserialize.o tools.o client.o server.o response.o
-	@g++ -pthread mserver.o request.o serialize.o unserialize.o tools.o client.o server.o response.o -o server ${INC}
+server: mserver.o request.o serialize.o unserialize.o tools.o client.o server.o response.o file.o
+	@g++ -pthread mserver.o request.o serialize.o unserialize.o tools.o client.o server.o response.o file.o -o server ${INC}
 
-client: mclient.o request.o serialize.o unserialize.o tools.o client.o server.o response.o
-	@g++ -pthread mclient.o request.o serialize.o unserialize.o tools.o client.o server.o response.o -o client ${INC}
+client: mclient.o request.o serialize.o unserialize.o tools.o client.o server.o response.o file.o
+	@g++ -pthread mclient.o request.o serialize.o unserialize.o tools.o client.o server.o response.o file.o -o client ${INC}
 
-mclient.o: mclient.cpp serialize.o unserialize.o tools.o request.o response.o
+mclient.o: mclient.cpp serialize.o unserialize.o tools.o request.o response.o file.o
 	@g++ ${CFLAGS} mclient.cpp  ${INC}
 
-mserver.o: mserver.cpp serialize.o unserialize.o tools.o request.o response.o
+mserver.o: mserver.cpp serialize.o unserialize.o tools.o request.o response.o file.o
 	@g++ ${CFLAGS} mserver.cpp  ${INC}
 
 serialize.o: include/serialize/serialize.hpp include/serialize/serialize.cpp tools.o
@@ -32,6 +32,9 @@ request.o: request.cpp request.hpp tools.o serialize.o unserialize.o
 response.o: response.cpp response.hpp tools.o serialize.o unserialize.o
 	@g++ ${CFLAGS} response.cpp
 
+file.o: file.cpp file.hpp tools.o serialize.o unserialize.o
+	@g++ ${CFLAGS} file.cpp
+
 client.o: include/udp/client/client.hpp include/udp/client/client.cpp
 	@g++ ${CFLAGS} include/udp/client/client.cpp
 
@@ -46,9 +49,9 @@ run:
 
 
 clean:
-	@rm -f mserver.o mclient.o serialize.o unserialize.o tools.o client.o server.o request.o response.o
+	@rm -f mserver.o mclient.o serialize.o unserialize.o tools.o client.o server.o request.o response.o file.o
 
 cleanall: 
-	@rm -f mserver.o mclient.o serialize.o unserialize.o tools.o client.o server.o request.o response.o server client ${EXEC}
+	@rm -f mserver.o mclient.o serialize.o unserialize.o tools.o client.o server.o request.o response.o file.o server client ${EXEC}
 
 All: server

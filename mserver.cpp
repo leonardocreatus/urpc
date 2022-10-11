@@ -13,18 +13,34 @@
 #include "request.hpp"
 #include "response.hpp"
 
+Client client(3001, "127.0.0.1");
+
+std::map<uint8_t, std::function<std::string (std::string msg)>> map_func;
+
+std::string sum(std::string msg){
+    Request req;
+    req.deserialize(msg);
+    uint64_t sum = 0;
+    for(auto i : req.vec){
+        sum += i;
+    }
+
+    Response res(sum);
+    return res.serialize();
+}
+
+
 int main(int argc, char** argv){
     
-    int port_server = atoi(argv[1]);
-    int port_client = atoi(argv[2]);
+    map_func[15] = sum;
 
-    Client client(port_client, "127.0.0.1");
-
-    Server server(port_server, [&client, port_client](std::string msg) -> void {
+    Server server(3000, [](std::string msg) -> void {
         Request req;
-        req.deserialize(msg);
-        Response res(req.a + req.b);
-        client.send(res.serialize());
+        uint8_t c = msg[0];
+        msg = msg.substr(1, msg.length() - 1);
+        std::function<std::string(std::string)> callback = map_func[c];
+        std::string res = callback(msg);
+        client.send((char)c + res);
     });
 
     getchar();

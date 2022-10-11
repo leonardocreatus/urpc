@@ -13,36 +13,42 @@
 #include "request.hpp"
 #include "response.hpp"
 
+std::map<uint8_t, std::function<void(std::string)>> map_func;
+Client client(3000, "127.0.0.1");
+
+void sum(Request req, std::function<void(std::string res)> callback){
+    uint8_t value = 15;
+    map_func[value] = callback;
+    std::string msg = char(value) + req.serialize();
+    std::cout << "size: " << msg.length() << std::endl;
+    client.send(msg);
+}
+
+
 int main(int argc, char** argv){
-    
-    int port_server = atoi(argv[1]);
-    int port_client = atoi(argv[2]);
-
-    // Client client;
-
-    // Server server(port_server, [&client, port_client](std::string ss, int size) -> void {
-    //     Response res;
-    //     res.deserialize(ss);
-    //     std::cout << "Response: " << res.x << std::endl;
-    // });
-
-    // getchar();
-
-    // Request r1(1, 2);
-    // client.request(r1.serialize(), "127.0.0.1", port_client);
-
-    Client client(port_client, "127.0.0.1");
-
-    Server server(port_server, [&client, port_client](std::string msg) -> void {
+        
+    Server server(3001, [](std::string msg) -> void {
         Response res;
-        res.deserialize(msg);
-        std::cout << "Response: " << res.x << std::endl;
+        uint8_t c = msg[0];
+        msg = msg.substr(1, msg.length() - 1);
+
+        std::function<void(std::string)> callback = map_func[c];
+        callback(msg);
     });
 
-    getchar();
 
-    Request r1(1, 2);
-    client.send(r1.serialize()); 
+    while(true){
+        int a, b;
+        std::cin >> a >> b;
+        std::vector<uint8_t> vec;
+        vec.push_back(a);
+        vec.push_back(b);
+        Request req(vec);
 
-    getchar();
+        sum(req, [](std::string ssres) -> void {
+            Response res;
+            res.deserialize(ssres);
+            std::cout << res.x << std::endl;
+        });
+    }
 }

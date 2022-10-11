@@ -22,7 +22,7 @@ Client::Client(int port, std::string ip, int payload_size, int timeout, int wind
 void Client::send(std::string msg){
     int parts = ceil(msg.length() / (double)this->payload_size);
     std::vector<int> noAcks;
-    int random = 0;
+    int random = rand();
     for(int send = 0; send < parts; send += this->window){
         #pragma omp parallel for
         for(int i = 0 ; i < this->window; i++){

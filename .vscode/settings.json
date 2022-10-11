@@ -74,6 +74,8 @@
     "thread": "cpp",
     "deque": "cpp",
     "fstream": "cpp",
-    "stack": "cpp"
+    "stack": "cpp",
+    "__memory": "cpp",
+    "filesystem": "cpp"
   }
 }
