@@ -9,6 +9,8 @@
 int main(int argc, char** argv){
     std::string out = encode(argv[1]);
     std::string in = decode(out);
-    std::cout << in << std::endl;
+
+    std::cout << "out: " << out.length() << std::endl;
+    std::cout << "in: " << in.length() << std::endl;
     return 0;   
 }

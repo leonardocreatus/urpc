@@ -11,13 +11,14 @@ class File {
     public:
         struct metadatas meta;
         
-        File(std::string name);
+        File(std::string name, std::string content);
         File();
         
         std::string serialize();
         void deserialize(std::string data);
         
         std::string name;
+        std::string content;
 };
 
 #endif

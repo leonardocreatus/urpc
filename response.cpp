@@ -21,18 +21,19 @@ Response::Response(){
 
 std::string Response::serialize(){
     std::string ss = serialize_struct(&meta);
-    std::string serialize;
-    for(int i = 0; i < ss.length(); i += 8){
-            serialize += std::bitset<8>(ss.substr(i, i + 8)).to_ulong();
-    }
-    return serialize; 
+    return ss;
+    // std::string serialize;
+    // for(int i = 0; i < ss.length(); i += 8){
+    //         serialize += std::bitset<8>(ss.substr(i, i + 8)).to_ulong();
+    // }
+    // return serialize; 
 }
 
 
 void Response::deserialize(std::string data){
-    std::string ss;
-    for(int i = 0; i < data.length(); i++){
-        ss += std::bitset<8>(data[i]).to_string();
-    }
-    unserialize_struct(ss, &meta);
+    // std::string ss;
+    // for(int i = 0; i < data.length(); i++){
+    //     ss += std::bitset<8>(data[i]).to_string();
+    // }
+    unserialize_struct(data, &meta);
 }

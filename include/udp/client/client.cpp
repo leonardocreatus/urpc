@@ -16,13 +16,11 @@ Client::Client(int port, std::string ip, int payload_size, int timeout, int wind
     if (inet_aton(this->ip.c_str() , &si_other.sin_addr) == 0) exit(1);
 }
 
-
-
-
 void Client::send(std::string msg){
     int parts = ceil(msg.length() / (double)this->payload_size);
     std::vector<int> noAcks;
     int random = rand();
+    std::cout << "parts: " << parts << std::endl;
     for(int send = 0; send < parts; send += this->window){
         #pragma omp parallel for
         for(int i = 0 ; i < this->window; i++){

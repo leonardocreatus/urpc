@@ -48,7 +48,6 @@ void Server::socket_start(){
 
         memcpy(msg + ptr->seq * this->payload_size, data, recv_len - sizeof(struct data_s));
         std::thread(&Server::socket_ack, this, ptr, len).detach();
-        std::cout << "count: " << *count << " parts: " << ptr->parts << std::endl;
         if(++(*count) == ptr->parts){
             std::string ss(msg, ((*count - 1) * this->payload_size) + tidToLetherSize[std::to_string(ptr->tid)]);
             std::cout << ss.size() << std::endl;
