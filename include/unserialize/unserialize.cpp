@@ -148,7 +148,6 @@ void unserialize_uint32_t(std::string& str, void* ptr){
         std::bitset<32> bits = 0;
     } aux;
     
-    // byte_aux.value = str[0] << 24 | str[1] << 16 | str[2] << 8 | str[3];
     int size = sizeof(aux.value);
     for(int i = 0; i < size; i++){
         aux.bits |= std::bitset<32>(str[i]) << (8 * ((size - 1) - i));
@@ -178,44 +177,72 @@ void unserialize_float(std::string& str, void* ptr){
 }
 
 void unserialize_int64_t(std::string& str, void* ptr){
-    std::bitset<64> bitset_aux(str.substr(0, 64));
-    bool is_negative = str[0] == '1';
-    std::bitset<64> twos_comp = std::bitset<64>(bitset_aux.flip().to_ulong() + 1);
+    union {
+        int64_t value;
+        std::bitset<64> bits = 0;
+    } aux;
+    
+    int size = sizeof(aux.value);
+    for(int i = 0; i < size; i++){
+        std::bitset<64> bit = 0;
+        bit = (uint8_t)str[i];
+        bit <<= (8 * (size - 1 - i));
+        aux.bits |= bit;
+    }
+
+    bool is_negative = aux.bits[0] == 1;
+
+    std::bitset<64> twos_comp = std::bitset<64>(aux.bits.flip().to_ulong() + 1);
     uint64_t value_is_int64_t_unsigned = static_cast<uint64_t>(twos_comp.to_ulong());
     int64_t value_is_int64_t = -static_cast<int64_t>(value_is_int64_t_unsigned);
     *(int64_t*)ptr = value_is_int64_t;
-    str = str.substr(64, str.size());
+
+    str = str.substr(size, str.size());
 }
 
 void unserialize_uint64_t(std::string& str, void* ptr){
     union {
         uint64_t value;
         std::bitset<64> bits = 0;
-    } byte_aux;
-    byte_aux.value = (uint8_t)str[0] << 56 
-                    | (uint8_t)str[1] << 48 
-                    | (uint8_t)str[2] << 40 
-                    | (uint8_t)str[3] << 32 
-                    | (uint8_t)str[4] << 24 
-                    | (uint8_t)str[5] << 16 
-                    | (uint8_t)str[6] << 8 
-                    | (uint8_t)str[7];
-
-    uint64_t value = static_cast<uint64_t>(byte_aux.bits.to_ulong());
+    } aux;
+    
+    int size = sizeof(aux.value);
+    for(int i = 0; i < size; i++){
+        aux.bits |= std::bitset<64>(str[i]) << (8 * ((size - 1) - i));
+    }
+    
+    uint64_t value = static_cast<uint64_t>(aux.bits.to_ulong());
     *(uint64_t*)ptr = value;
-    str = str.substr(64 / 8, str.size());
+    str = str.substr(size, str.size());
 }
 
 void unserialize_double(std::string& str, void* ptr){
-    std::bitset<64> bitset_aux(str.substr(0, 64));
-    union {
-        double _double;
-        uint64_t _int;
-    } data;
+    // std::bitset<64> bitset_aux(str.substr(0, 64));
+    // union {
+    //     double _double;
+    //     uint64_t _int;
+    // } data;
 
-    data._int = static_cast<uint64_t>(bitset_aux.to_ulong());;
-    *(double*)ptr = data._double;
-    str = str.substr(64, str.size());
+    // data._int = static_cast<uint64_t>(bitset_aux.to_ulong());;
+    // *(double*)ptr = data._double;
+    // str = str.substr(64, str.size());
+    union {
+        double value;
+        std::bitset<64> bits = 0;
+    } aux;
+
+    int size = sizeof(aux.value);
+    for(int i = 0; i < size; i++){
+        std::bitset<64> bit = 0;
+        bit = (uint8_t)str[i];
+        // bit = (0 << 56 ) | (uint8_t)str[i];
+
+        bit <<= (8 * (4 - 1 - i));
+        aux.bits |= bit;
+    }
+
+    *(double*)ptr = aux.value;
+    str = str.substr(size, str.size());
 }
 
 

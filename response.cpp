@@ -1,11 +1,11 @@
 #include "response.hpp"
 
-Response::Response(uint64_t x){
+Response::Response(float x){
     this->x = x;
     
     meta.key_fields.push_back("x");
     
-    meta.type_fields["x"] = UINT64_T;
+    meta.type_fields["x"] = FLOAT;
     
     meta.ptr_fields["x"] =  &this->x;
 }
@@ -14,7 +14,7 @@ Response::Response(uint64_t x){
 Response::Response(){
     meta.key_fields.push_back("x");
     
-    meta.type_fields["x"] = UINT64_T;
+    meta.type_fields["x"] = FLOAT;
     
     meta.ptr_fields["x"] =  &this->x;
 }

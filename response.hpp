@@ -13,13 +13,13 @@ class Response {
     public: 
         struct metadatas meta;
         
-        Response(uint64_t x);
+        Response(float x);
         Response();
 
         std::string serialize();
         void deserialize(std::string data);
 
-        uint64_t x;
+        float x;
 };
 
 #endif

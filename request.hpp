@@ -13,13 +13,13 @@ class Request {
     public: 
         struct metadatas meta;
         
-        Request(std::vector<float> vec);
+        Request(std::vector<double> vec);
         Request();
 
         std::string serialize();
         void deserialize(std::string data);
 
-        std::vector<float> vec;
+        std::vector<double> vec;
 };
 
 #endif

@@ -51,11 +51,8 @@ int main(int argc, char** argv){
         std::function<void(std::string)> callback = map_func[c];
         callback(msg);
     });
-    /*
-    std::numeric_limits<float>::max();
-    std::numeric_limits<float>::min();
-    */
-    std::vector<float> vec = {-12345678, -0.123456, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    
+    std::vector<double> vec = {std::numeric_limits<double>::max(), std::numeric_limits<double>::min()};
     for(auto i : vec){
         std::cout << i << std::endl;
     }
@@ -78,7 +75,8 @@ int main(int argc, char** argv){
 
         for(int i = 0 ; i < r.vec.size() ; i++){
             // std::cout << "i: " << (float)r.vec[i] << std::endl;
-            printf("i: %f \n", r.vec[i]);
+            // printf("i: %lld \n", r.vec[i]);
+            std::cout << "i: " << r.vec[i] << std::endl;
         }
     });
 
