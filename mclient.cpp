@@ -65,7 +65,6 @@ int main(int argc, char** argv){
         std::cout << i << std::endl;
     }
     std::cout << "END" << std::endl;
-    // exit(1);
     sum(req, [](std::string res){
         std::cout << "SUM CLIENT" << std::endl;
         Request r;

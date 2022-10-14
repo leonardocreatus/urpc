@@ -237,7 +237,7 @@ void unserialize_double(std::string& str, void* ptr){
         bit = (uint8_t)str[i];
         // bit = (0 << 56 ) | (uint8_t)str[i];
 
-        bit <<= (8 * (4 - 1 - i));
+        bit <<= (8 * (size - 1 - i));
         aux.bits |= bit;
     }
 
