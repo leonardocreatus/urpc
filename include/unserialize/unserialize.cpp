@@ -22,7 +22,6 @@ std::function<void(std::string& str, void*)> get_unserialize_func(uint8_t type){
 
 
 void unserialize_int8_t(std::string& str, void* ptr){
-    std::cout << "unserialize_int8_t" << std::endl;
     union {
         int8_t value;
         std::bitset<8> bits = 0;
@@ -34,7 +33,6 @@ void unserialize_int8_t(std::string& str, void* ptr){
     uint8_t value_is_int8_t_unsigned = static_cast<uint8_t>(twos_comp.to_ulong());
     int8_t value_is_int8_t = -static_cast<int8_t>(value_is_int8_t_unsigned);
     *(int8_t*)ptr = value_is_int8_t;
-    printf("unserialize_int8_t: %d", value_is_int8_t);
     str = str.substr(8 / 8, str.size()); 
 }
 
@@ -255,14 +253,9 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
 
     std::function<void(std::string& str, void*)> func = get_unserialize_func(type);
     void* p = ptr;
-    std::cout << "unserialize array size: " << size << std::endl;
-    std::cout << "unserialize array type: " << (int)type << std::endl;
-
-    std::cout << "unserialize get_size: " << (int)get_size(type) << std::endl;
     if(type != CHAR){
         switch(get_size(type)){
             case 8: {
-                std::cout << "unserialize array 8" << std::endl;
                 std::vector<uint8_t>* vec = (std::vector<uint8_t>*)ptr;
                 vec->resize(size);
                 p = vec->data(); 
@@ -286,22 +279,18 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
     }
     
     for(int i = 0; i < size; i++){
-        std::cout << "unserialize array for, position " << i  << std::endl;
         void* ptr_aux = (void*)((uint8_t*)p + i * get_size(type) / 8);
         func(data_ss, ptr_aux);
     }
-    std::cout << "unserialize array end" << std::endl;
 
     if(type == CHAR){
         ((char*)p)[size] = '\0';
     }
 
     str = str.substr(size * (size_of_type / 8) + 4, str.size());
-    std::cout << " -- unserialize array end" << std::endl;
 }
 
 void unserialize_string(std::string& str, void* ptr){
-    std::cout << "unserialize string" << std::endl;
     std::string size_ss = str.substr(0, 32 / 8);
     uint32_t size = 0;
     unserialize_uint32_t(size_ss, &size);
@@ -313,17 +302,13 @@ void unserialize_string(std::string& str, void* ptr){
 
 void unserialize_struct(std::string& serialized, struct metadatas* metadata) {
 
-    std::cout << "unserialize struct" << std::endl;
     for(int i =0; i < serialized.size(); i++){
         std::bitset<8> byte(serialized[i]);
-        std::cout << byte.to_string() << " ";
     }
-    std::cout << std::endl;
+
     for(auto fields : metadata->key_fields) {
         uint8_t type = metadata->type_fields[fields];
         void* ptr = metadata->ptr_fields[fields];
-        std::cout << "fields: " << fields << std::endl;
-        std::cout << "type: " << (int)type << std::endl;
         if(type == OBJECT){
             unserialize_struct(serialized, (struct metadatas*)ptr);
         } else if(type == STRING){

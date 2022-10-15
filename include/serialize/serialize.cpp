@@ -67,8 +67,6 @@ std::string serialize_int16_t(void* ptr){
 
 std::string serialize_uint16_t(void* ptr){
     std::bitset<16> bits(*(uint16_t*)ptr);
-    // return bits.to_string();
-
     std::string serialize_parse;
     uint16_t value = bits.to_ulong();
     serialize_parse += (value >> 8);
@@ -78,8 +76,6 @@ std::string serialize_uint16_t(void* ptr){
 
 std::string serialize_int32_t(void* ptr){
     std::bitset<32> bits(*(int32_t*)ptr);
-    std::cout << "serialize int32_t: " << bits.to_string() << std::endl;
-    // return bits.to_string();v
     std::string serialize_parse;
     uint32_t value = bits.to_ulong();
     serialize_parse += (value >> 24);
@@ -92,7 +88,6 @@ std::string serialize_int32_t(void* ptr){
 
 std::string serialize_uint32_t(void* ptr){
     std::bitset<32> bits(*(uint32_t*)ptr);
-    // return bits.to_string();
     std::string serialize_parse;
     uint32_t value = bits.to_ullong();
     serialize_parse += (value >> 24);
@@ -109,8 +104,6 @@ std::string serialize_float(void* ptr){
     } data;
     data._float = *(float*)ptr;
     std::bitset<32> bits(data._int);
-    
-    std::cout << "value: " << data._float << " serialize: " << bits.to_string() << std::endl;
 
     std::string serialize_parse;
     uint32_t value = bits.to_ulong();
@@ -119,12 +112,6 @@ std::string serialize_float(void* ptr){
     serialize_parse += (value >> 16);
     serialize_parse += (value >> 8);
     serialize_parse += (value >> 0);
-
-    for(int i = 0; i < serialize_parse.size(); i++){
-        std::cout << "serialize_parse[" << i << "]: " << (int)serialize_parse[i] << std::endl;
-    }
-
-
 
     return serialize_parse;
 }
@@ -192,36 +179,29 @@ std::string serialize_double(void* ptr){
 
 std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
     std::string serialized;
-    std::cout << "size: " << size << std::endl;
     serialized += serialize_uint32_t(&size);
     uint8_t size_of_type = get_size(type);
     std::function<std::string(void*)> func = get_serialize_func(type);
-    std::cout << "serialized: " << serialized.size() << std::endl;
     for(int i = 0; i < size; i++){
         void* ptr_to_type = (void*)((uint8_t*)ptr + i * get_size(type) / 8);
         serialized += func(ptr_to_type);
-        std::cout << "serialized: " << serialized.size() << std::endl;
     }
     return serialized;
 }
 
 std::string serialize_string(void* ptr){
     std::string* str = (std::string*)ptr;
-    std::cout << "str size: " << str->size() << std::endl;
     char c_str[str->length() + 1];
     strcpy(c_str, str->c_str());
     return serialize_array(c_str, CHAR, str->length());
 }
 
 std::string serialize_vector(void* ptr, uint8_t type){
-    std::cout << "serialize_vector" << std::endl;
     std::string serialized;
     if(type != CHAR){
         switch(get_size(type)){
             case 8: {
-                std::cout << "serialize_vector 8" << std::endl;
                 std::vector<uint8_t>* vc = (std::vector<uint8_t>*)ptr;
-                std::cout << "vc size: " << vc->size() << std::endl;
                 serialized += serialize_array(vc->data(), type, vc->size());
             }; break;
             case 16: {
@@ -247,8 +227,6 @@ std::string serialize_struct(struct metadatas* meta) {
 
     for(auto fields : meta->key_fields) {
         uint8_t type = meta->type_fields[fields];
-        std::cout << "type: " << (int)type << std::endl;
-        std::cout << "field: " << fields << std::endl;
         void* ptr = meta->ptr_fields[fields];
 
         if(type == OBJECT){
@@ -263,11 +241,6 @@ std::string serialize_struct(struct metadatas* meta) {
     }
     for(int i = 0; i < serialized.size(); i++){
         std::bitset<8> bits(serialized[i]);
-        std::cout << bits.to_string() << " ";
     }
-
-    // 0111111111101111111111111111111111111111111111111111111111111111   0000000000010000000000000000000000000000000000000000000000000000
-    // 0111111111101111111111111111111111111111111111111111111111111111   0000000000010000000000000000000000000000000000000000000000000000
-    std::cout << std::endl << "serialized" << std::endl;
     return serialized;
 }
