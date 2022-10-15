@@ -16,7 +16,7 @@
 std::map<uint8_t, void*> map_func;
 Client client(3000, "127.0.0.1");
 
-void stumb(std::string ss, uint8_t fn_id){
+void stub(std::string ss, uint8_t fn_id){
     std::cout << "fn_id: " << (int)fn_id << std::endl;
     switch (fn_id){
         case 15: {
@@ -45,7 +45,7 @@ int main(int argc, char** argv){
     Server server(3001, [](std::string msg) -> void {;
         uint8_t c = msg[0];
         msg = msg.substr(1, msg.length() - 1);
-        stumb(msg, c);
+        stub(msg, c);
     });
     
     Request req("ABCDef");

@@ -21,7 +21,7 @@ Request sum(Request req){
     return res;
 }
 
-std::string stumb(std::string str, uint8_t fn_id){
+std::string stub(std::string str, uint8_t fn_id){
     std::string ssres;
     switch (fn_id){
         case 15: {
@@ -44,7 +44,7 @@ int main(int argc, char** argv){
     Server server(3000, [](std::string msg) -> void {
         uint8_t c = msg[0];
         msg = msg.substr(1, msg.length() - 1);
-        std::string res = stumb(msg, c); 
+        std::string res = stub(msg, c); 
         std::string msgres = char(c) + res;      
         client.send(msgres);
     });
