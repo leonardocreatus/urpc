@@ -16,9 +16,6 @@ Client::Client(int port, std::string ip, int payload_size, int timeout, int wind
     if (inet_aton(this->ip.c_str() , &si_other.sin_addr) == 0) exit(1);
 }
 
-
-
-
 void Client::send(std::string msg){
     int parts = ceil(msg.length() / (double)this->payload_size);
     std::vector<int> noAcks;
@@ -48,14 +45,12 @@ void Client::send(std::string msg){
             int recv_len;
             socklen_t len = sizeof(si_other);
             if ((recv_len = recvfrom(s, buf, sizeof(struct data_s) + this->payload_size, 0, (struct sockaddr *) &si_other, &len)) == -1){
-                std::cout << "timeout: " << i + send << std::endl;
                 noAcks.push_back(send + i);
             }
         }
     }
 
     while(noAcks.size() > 0){
-        std::cout << "resending: " << noAcks.size() << std::endl;
         std::vector<int> newNoAcks;
         #pragma omp parallel for
         for(int i = 0; i < noAcks.size(); i++){
