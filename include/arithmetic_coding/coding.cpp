@@ -23,12 +23,14 @@ std::string encode(std::string str){
     start_model();
     start_outputing_bits();
     start_encoding();
-    for(auto i : str){
+
+    for(int i = 0; i < str.length(); i++){
+        char c = str[i];
         int ch; int symbol;
-        ch = i;
+        ch = c;
         
         if (ch == EOF) break;
-        symbol = char_to_index[ch];
+        symbol = char_to_index[ch > 0 ? ch : ch * -1];
         encode_symbol(symbol, cum_freq);
         update_model(symbol);
     }

@@ -76,6 +76,16 @@
     "fstream": "cpp",
     "stack": "cpp",
     "__memory": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "semaphore": "cpp",
+    "codecvt": "cpp",
+    "condition_variable": "cpp",
+    "numbers": "cpp",
+    "numeric": "cpp",
+    "queue": "cpp",
+    "random": "cpp",
+    "*.tcc": "cpp",
+    "memory_resource": "cpp",
+    "stop_token": "cpp"
   }
 }

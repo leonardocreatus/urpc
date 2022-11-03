@@ -1,25 +1,26 @@
 #include "request.hpp"
 
-Request::Request(uint8_t a, uint8_t b){
-    this->a = a;
-    this->b = b;
+Request::Request(std::string str){
+    this->str = str;
 
-    meta.key_fields.push_back("a");
-    meta.key_fields.push_back("b");
-    meta.type_fields["a"] = UINT8_T;
-    meta.type_fields["b"] = UINT8_T;
-    meta.ptr_fields["a"] =  &this->a;
-    meta.ptr_fields["b"] =  &this->b;
+    meta.key_fields.push_back("str");
+    meta.type_fields["str"] = STRING;
+    meta.ptr_fields["str"] =  &this->str;
+    std::cout << "Request ptr: " << &this->str << std::endl;
 }
 
 
 Request::Request(){
-    meta.key_fields.push_back("a");
-    meta.key_fields.push_back("b");
-    meta.type_fields["a"] = UINT8_T;
-    meta.type_fields["b"] = UINT8_T;
-    meta.ptr_fields["a"] =  &this->a;
-    meta.ptr_fields["b"] =  &this->b;
+
+    this->str = "";
+    meta.key_fields.push_back("str");
+    meta.type_fields["str"] = STRING;
+    meta.ptr_fields["str"] =  &this->str;
+    std::cout << "Requestb ptr: " << &this->str << std::endl;
+}
+
+Request::~Request(){
+
 }
 
 std::string Request::serialize(){

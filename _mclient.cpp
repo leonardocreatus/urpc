@@ -17,14 +17,12 @@ std::map<uint8_t, void*> map_func;
 Client client(3000, "127.0.0.1");
 
 void stub(std::string ss, uint8_t fn_id){
-    std::cout << "fn_id: " << (int)fn_id << std::endl;
     switch (fn_id){
         case 15: {
             void* fn_void = map_func[fn_id];
             void (*fn)(Request) = (void(*)(Request))fn_void;
             Request req;
             req.deserialize(ss);
-            std::cout << "req.str: " << req.str << std::endl;
             fn(req);
         }; break;
     } 

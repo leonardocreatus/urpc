@@ -4,6 +4,8 @@
 #include <iostream>
 #include <map>
 #include <cstring>
+#include <chrono>
+#include <omp.h>
 #include "./../tools/tools.hpp"
 
 

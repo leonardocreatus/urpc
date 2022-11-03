@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <fstream>
 #include <cmath>
+#include <omp.h>
 
 #include "../tools/data_s.h"
 
@@ -38,6 +39,7 @@ class Client {
     public:
         // Client(int port, std::string ip);
         Client(int port, std::string ip, int payload_size = 512, int timeout = 10, int window = 16);
+        ~Client();
         void send(std::string msg);
 };
 

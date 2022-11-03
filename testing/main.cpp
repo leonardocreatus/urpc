@@ -1,33 +1,20 @@
-// bitset operators
-#include <iostream>       // std::cout
-#include <string>         // std::string
-#include <bitset>         // std::bitset
-#include <any> 
-#include <map>
+#include <iostream>
 
+void sum1(int& x){
+    printf("sum1: %p\n", &x);
+    x *= 10;
+}
 
-std::map<uint8_t, void*> map_type_to_serialize;
-
-int sum(int a){
-    return a + 1;
+void sum2(int x){
+    printf("sum2: %p\n", &x);
+    x *= 10;
 }
 
 
+int main(int argc, char** argv){
+    int n = 5;
+    printf("main: %p\n", &n);
+    sum2(n);
 
-
-int main ()
-{
-
-
-    // std::function<std::any(std::any)> func = sum;
-    // map_type_to_serialize[15] = func;
-    // printf("%p", sum);
-    map_type_to_serialize[15] = (void*)sum;
-    std::function<int(int)> func = (int(*)(int))map_type_to_serialize[15];
-    int res = func(5);
-    std::cout << res << std::endl;
-    // std::any a = sum;
-    // std::cout << std::any_cast<int(*)(int)>(a)(1) << std::endl;
-
-    return 0;
+    sum1(n);
 }

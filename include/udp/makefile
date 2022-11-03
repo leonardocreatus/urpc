@@ -1,11 +1,11 @@
 GCC = g++-12
 EXEC = app
-CFLAGS = -c -std=c++2a
+CFLAGS = -c -std=c++2a -fopenmp
 
 INC = -I ./include
 
 ${EXEC}: main.o server.o client.o
-	@${GCC} -pthread main.o server.o client.o -o ${EXEC} ${INC}
+	@${GCC} -pthread main.o server.o client.o -fopenmp -o ${EXEC} ${INC}
 
 main.o: main.cpp server.o client.o
 	@${GCC} ${CFLAGS} main.cpp  ${INC}
