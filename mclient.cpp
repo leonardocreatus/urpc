@@ -18,24 +18,51 @@ std::chrono::system_clock::duration res;
 std::map<int, std::vector<std::chrono::system_clock::duration>> map;
 int lastSize = 0;
 
+std::string ip;
+int timeout;
+int windows;
+int datagram;
+int size;
+
+void callback(Request req);
+RpcClient *client;
+
+void fn(){
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::string str;
+
+    for(int i = 0; i < size; i++){
+        str += "a";
+    }
+
+    
+    Request req(str);
+    start = std::chrono::high_resolution_clock::now();
+    client->sum(req, (void*)callback);
+}
 
 void callback(Request req){
-    // std::cout << "callback" << std::endl;
-    // std::cout << "req.str.size: " << req.str.size() << std::endl;
     if(lastSize != req.str.size()){
-        // std::cout << "callback point 1" << std::endl;
         auto finish = std::chrono::high_resolution_clock::now();
-        // std::cout << "callback point 2" << std::endl;
         std::chrono::system_clock::duration diff = std::chrono::duration_cast<std::chrono::microseconds>(finish - start);
-        // std::cout << "callback point 3" << std::endl;
         res = diff;
-        // std::cout << "callback point 4" << std::endl;
-        std::cout << res.count();
-        // std::cout << "callback point 5" << std::endl;
+        printf("%ld", res.count());
         exit(0);
-        // sem.release();
+        // std::cout << req.str.size() << " " << res.count();
+        // std::cout << res.count();
+        
+
+        // if(size < 1024 * 32){
+        //     exit(0);
+        //     size += 1024;
+        //     fn();
+        // }else{
+        //     exit(0);
+        // }
+
     }
 }
+
 
 int main(int argc, char** argv){
     
@@ -44,32 +71,23 @@ int main(int argc, char** argv){
         return 0;
     }
 
-    std::string ip = argv[1];
-    int timeout = atoi(argv[2]);
-    int windows = atoi(argv[3]);
-    int datagram = atoi(argv[4]);
-    int size = atoi(argv[5]);
+    ip = argv[1];
+    timeout = atoi(argv[2]);
+    windows = atoi(argv[3]);
+    datagram = atoi(argv[4]);
+    size = atoi(argv[5]);
+
     omp_set_num_threads(windows);
 
+    // 
+
     try {
-        RpcClient rpc(ip, 3001, datagram, timeout, windows);
-        std::string str;
-        for(int i = 0; i < size; i++){
-            str += "a";
-        }
-
-        Request req(str);
-        start = std::chrono::high_resolution_clock::now();
-        rpc.sum(req, (void*)callback);
-        // sem.acquire()
-
+        client = new RpcClient(ip, 3001, datagram, timeout, windows);
+        fn();
+        
         getchar();
-    
-    }catch(std::exception e){
-        // std::cout << e.what() << std::endl;
-    }
+    }catch(std::exception e){}
 
-    // std::cout << "result: " << res.count() << std::endl;
     getchar();
     return 0;
 }

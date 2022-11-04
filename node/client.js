@@ -1,145 +1,139 @@
-import { setTimeout } from "timers/promises";
 import express from "express";
 import util from "util";
 import { exec, spawn } from "child_process";
 import kill from "kill-port";
 import fs from "fs/promises";
-// const kill = require("kill-port");
 import path from "path";
+import axios from "axios";
 const execAsync = util.promisify(exec);
 const rpcPath = path.resolve("..");
 
-const datagram = 512;
-const payloadSize = 1024;
+const datagramSize = 512;
+const maxDatagram = 512;
+
+const size = 1024;
+const maxSize = 32 * size;
+
 const timeout = 1;
 const window = 16;
-const ip = "192.168.64.10";
 
-const app = express();
-app.use(express.json());
+const loss = 24;
+
+const ip = "10.0.1.20";
+const thisIp = "10.0.0.20";
+
 /*
-const callback = async (payload) => {
-  const cmd = `${rpcPath}/client ${ip} ${timeout} ${window} ${datagram} ${payload}`;
-  const promise = new Promise((resolve, reject) => {
-    const p1 = new Promise((resolve, reject) => {
-      const clientChield = spawn(cmd, {
-        shell: true,
-        //   stdio: "inherit",
-      });
-
-      clientChield.on("close", (code) => {
-        clientChield.kill();
-        if (code === 0) {
-          resolve(true);
-        } else {
-          reject();
-        }
-      });
-
-      clientChield.stdout.on("data", (data) => {
-        console.log("data", data.toString());
-      });
-
-      clientChield.stderr.on("data", (data) => {
-        clientChield.kill();
-        console.log("data", data.toString());
-        reject();
-      });
-    });
-
-    const p2 = new Promise((resolve, reject) => {
-      setTimeout(1000).then(() => {
-        // resolve(throw Error());
-        reject();
-      });
-    });
-
-    return Promise.race([p1, p2]).then((res) => {
-      try {
-        resolve(res);
-      } catch (e) {
-        reject();
-      }
-    });
-  });
-  return promise;
-};
+1. Fazer requisição para executar o servidor
+2. Executar o cliente
+3. Fazer requisição para finalizar o servidor
+4. Finalizar o cliente
+5. Somar payload, voltar ao estado 1 
 */
 
-let clientChield = null;
-app.post("/", async (req, res) => {
-  try {
-    const payload = req.body.data.payload;
-    console.log("payload", payload);
-    const promise = new Promise((resolve, reject) => {
-      const cmd = `${rpcPath}/client ${ip} ${timeout} ${window} ${datagram} ${payload}`;
-      clientChield = spawn(cmd, {
-        shell: true,
-        //   stdio: "inherit",
-      });
+const obj = {};
 
-      clientChield.on("close", (code) => {
-        clientChield.kill();
-        if (code === 0) {
-          resolve(true);
-        } else {
-          reject();
-        }
-      });
+const main = async (payload, datagram) => {
+  console.log(payload, datagram);
+  await axios.post(`http://${ip}:4000/start`, {
+    ip: thisIp,
+    datagram,
+    timeout,
+    window,
+  });
 
-      clientChield.stdout.on("data", async (data) => {
-        const str = data.toString();
-        if (Number.isInteger(parseInt(str))) {
-          console.log("Integer", str);
-          const msg = `${payload.toString().padEnd(10, " ")} ${str
-            .toString()
-            .padEnd(10, " ")}\n`;
-          await fs.appendFile("log.dat", msg);
-          clientChield.kill();
-          resolve(parseInt(str));
-        } else {
-          if (str.includes("bind")) {
-            kill(3001, "udp").then(console.log).catch(console.log);
-          }
-          console.log("data", str);
-          clientChield.kill();
-          reject();
-        }
-        // console.log(`${payload} data: `, data.toString());
-        // if()
-      });
+  const client = spawn(`${rpcPath}/client`, [
+    ip,
+    timeout,
+    window,
+    datagram,
+    payload,
+  ]);
 
-      clientChield.stderr.on("data", (data) => {
-        clientChield.kill();
-        console.log(`${payload} error: `, data.toString());
-        reject("error");
+  const stdout = await Promise.race([
+    new Promise((resolve) => {
+      client.stdout.on("data", (data) => {
+        resolve(data.toString());
       });
-    });
+    }),
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("-1");
+      }, 5000);
+    }),
+  ]);
 
-    const timeoutPromise = new Promise((resolve, reject) => {
-      setTimeout(5000).then(() => {
-        console.log("timeout");
-        clientChield.kill();
-        reject("timeout");
-      });
-    });
-    const result = await Promise.race([promise, timeoutPromise]);
-    console.log("res", result);
-    if (result) {
-      res.status(200).send({
-        payload: payload + payloadSize,
-      });
+  client.kill();
+
+  if (stdout != "-1") {
+    console.log(payload, datagram, stdout);
+    obj[payload] = {
+      ...obj[payload],
+      [datagram]: stdout,
+    };
+    if (payload < maxSize) {
+      payload += size;
+    } else if (datagram == maxDatagram) {
+      return;
     } else {
-      res.status(200).send({
-        payload,
-      });
+      payload = size;
+      datagram += datagramSize;
     }
-  } catch (error) {
-    console.log("catch error", error);
-    res.status(400).send(error);
+  } else {
+    console.log("timeout");
   }
-});
 
-app.listen(4000, () => {
-  console.log("server started");
-});
+  await axios.post(`http://${ip}:4000/stop`);
+  await main(payload, datagram);
+};
+
+await main(size, datagramSize);
+/*
+{
+  "16": {
+    "256": "0.000000",
+    "512": "0.000000",
+    "768": "0.000000",
+    "1024": "0.000000",
+  },
+  "32": {
+    "256": "0.000000",
+    "512": "0.000000",
+    "768": "0.000000",
+    "1024": "0.000000",
+  }
+}
+*/
+
+// for (let i in obj) {
+//   console.log(i, obj[i]);
+//   const v256 = obj[i][256];
+//   const v512 = obj[i][512];
+//   const v768 = obj[i][768];
+//   const v1024 = obj[i][1024];
+//   const v1280 = obj[i][1280];
+//   const v1536 = obj[i][1536];
+//   const v1792 = obj[i][1792];
+//   const v2048 = obj[i][2048];
+
+//   const ss = `${i.toString().padEnd(10)} ${v256.toString().padEnd(10)} ${v512
+//     .toString()
+//     .padEnd(10)} ${v768.toString().padEnd(10)} ${v1024
+//     .toString()
+//     .padEnd(10)} ${v1280.toString().padEnd(10)} ${v1536
+//     .toString()
+//     .padEnd(10)} ${v1792.toString().padEnd(10)} ${v2048
+//     .toString()
+//     .padEnd(10)}\n`;
+
+//   fs.appendFile(`result/${timeout}_${window}_${size}-${maxSize}.dat`, ss);
+// }
+
+const keys = Object.keys(obj).sort((a, b) => parseInt(a) - parseInt(b));
+console.log(keys);
+for (const i of keys) {
+  const ss = `${i.toString().padEnd(10)} ${obj[i][datagramSize]}\n`;
+  await fs.appendFile(
+    `result/loss_${loss}%_${timeout}ms_${window}_${datagramSize}_${size}-${maxSize}.dat`,
+    ss
+  );
+}

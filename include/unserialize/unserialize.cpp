@@ -295,9 +295,9 @@ void unserialize_array(std::string& str, void* ptr, uint8_t type) {
         func(it + i, ptr_aux);
     }
 
-    printf("it: %p\n", it);
-    printf("it.end: %p\n", data_ss.end());
-    printf("it + size: %p\n", it + size);
+    // printf("it: %p\n", it);
+    // printf("it.end: %p\n", data_ss.end());
+    // printf("it + size: %p\n", it + size);
 
 
     // std::cout << "unserialize array end" << std::endl;
@@ -336,9 +336,9 @@ void unserialize_string(std::string& str, void* ptr){
     // ss->assign(_ss, size);
     std::string aux_ss(_ss, size);
     // std::cout << "aux ss size: " << aux_ss.size() << std::endl;
-    printf("ss pointer: %p\n", ss);
+    // printf("ss pointer: %p\n", ss);
     std::copy(ss->rbegin(), ss->rend(), std::back_inserter(aux_ss));
-    printf("ss pointer: %p\n", ss);
+    // printf("ss pointer: %p\n", ss);
     // std::cout << "ss size: " << ss->size() << std::endl;
 
     // *ss = std::string(_ss);

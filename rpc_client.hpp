@@ -39,7 +39,7 @@ class RpcClient {
             switch (fn_id){
                 case 15: {
                     void* fn_void = this->mapFn[fn_id];
-                    printf("[%d] stub pointer: %p\n", fn_id, fn_void);
+                    // printf("[%d] stub pointer: %p\n", fn_id, fn_void);
                     // void (*fn)(Request) = (void(*)(Request))fn_void;
                     // std::function<void(Request)> fn = (void(Request))fn_void;
                     //converting void* to function pointer
@@ -49,7 +49,7 @@ class RpcClient {
                     Request req;
                     req.deserialize(ss);
                     // std::cout << "stub fn, size: " << req.str.size() << std::endl;
-                    printf("fn pointer: %p\n", fn);
+                    // printf("fn pointer: %p\n", fn);
                     // fn(req);
                     // execute function fn
                     fn(req);
@@ -82,7 +82,7 @@ class RpcClient {
 
         void sum(Request req, void* callback){
             uint8_t id = 15;
-            printf("[%d] callback pointer: %p\n", id, callback);
+            // printf("[%d] callback pointer: %p\n", id, callback);
             this->registerCallback(id, callback);
             std::string msg = req.serialize();
             // msg = encode(msg);

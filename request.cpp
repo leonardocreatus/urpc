@@ -6,7 +6,7 @@ Request::Request(std::string str){
     meta.key_fields.push_back("str");
     meta.type_fields["str"] = STRING;
     meta.ptr_fields["str"] =  &this->str;
-    std::cout << "Request ptr: " << &this->str << std::endl;
+    // std::cout << "Request ptr: " << &this->str << std::endl;
 }
 
 
@@ -16,7 +16,7 @@ Request::Request(){
     meta.key_fields.push_back("str");
     meta.type_fields["str"] = STRING;
     meta.ptr_fields["str"] =  &this->str;
-    std::cout << "Requestb ptr: " << &this->str << std::endl;
+    // std::cout << "Requestb ptr: " << &this->str << std::endl;
 }
 
 Request::~Request(){

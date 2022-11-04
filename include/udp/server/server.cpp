@@ -37,6 +37,7 @@ Server::~Server(){
 }
 
 void Server::socket_ack(struct data_s *ptr, socklen_t len){
+    // std::cout << "Server socket_ack start" << std::endl;
     char *buf = (char *)ptr;
     if (sendto(s, buf, sizeof(struct data_s), 0 , (struct sockaddr *) &si_other, len) == -1){
         // exit(1);
@@ -58,8 +59,8 @@ void Server::socket_start(){
         while(1){
             memset(buf, 0, sizeof(buf));
             if ((recv_len = recvfrom(s, buf, sizeof(struct data_s) + this->payload_size, 0, (struct sockaddr *) &si_other, &len)) == -1){
-                // std::cout << "recvfrom error! -> " << std::endl;
-                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                std::cout << "recvfrom error!" << std::endl;
+                // std::this_thread::sleep_for(std::chrono::milliseconds(200));
                 // break;
                 continue;
             }
@@ -67,14 +68,17 @@ void Server::socket_start(){
 
             char* msg = tidToMsg[std::to_string(ptr->tid)];
             int count = tidToCount[std::to_string(ptr->tid)];
+            // std::cout << "receive: " << ptr->seq << std::endl;
         
             if(msg == NULL){
 
                 if(last_tid != ptr->tid){
+                    // std::cout << "new tid: " << ptr->tid << std::endl;
                     msg = (char*)malloc(ptr->parts * this->payload_size);
                     count = 0;
                     // count = new int(0);
                 }else {
+                    // std::cout << "msg != NULL" << std::endl;
                     // std::thread(&Server::socket_ack, this, ptr, len).detach();
                     this->socket_ack(ptr, len);
                     continue;     
@@ -86,6 +90,7 @@ void Server::socket_start(){
             }
 
             memcpy(msg + ptr->seq * this->payload_size, data, recv_len - sizeof(struct data_s));
+            // std::cout <<  "tid: " << ptr->tid << " seq: " << ptr->seq << " parts: " << ptr->parts << std::endl;
             this->socket_ack(ptr, len);
             // this->thread_socket_ack = new std::thread(&Server::socket_ack, this, ptr, len);
 
@@ -93,9 +98,11 @@ void Server::socket_start(){
             if(rcvMap[ptr->seq] != true){
                 rcvMap[ptr->seq] = true;
                 count += 1;
+                // std::cout << "count: " << count << std::endl;
             }
             
             if(count == ptr->parts){
+                // std::cout << "receive complete" << std::endl;
                 last_tid = ptr->tid;
                 std::string ss(msg, ((count - 1) * this->payload_size) + tidToLetherSize[std::to_string(ptr->tid)]);
 

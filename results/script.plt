@@ -6,10 +6,12 @@ reset
 
 set grid xtics nomxtics ytics nomytics noztics nomztics \
 
-set title "Testes de chamada de procedimento remoto sem compressão, variando payload de 0ms a 250ms" font "Arial, 12"
+set title "Testess de chamada de procedimento remoto sem compressão, variando payload de 0ms a 250ms" font "Arial, 12"
 set ylabel "time (us)" font "Arial, 12"
 set xlabel "size (bytes)" font "Arial, 12"
 set key outside
+# set ydata time
+set format y '%.6f'
 # set logscale x 2
 # set format x "%.0s*10^{%T}"
 
