@@ -27,6 +27,7 @@ class RpcClient {
 
         Client *client;
         Server *server;
+        bool coding;
         std::map<uint8_t, void*> mapFn;
 
         void rcvMsg(std::string msg){
@@ -45,7 +46,7 @@ class RpcClient {
                     //converting void* to function pointer
                     void (*fn)(Request) = (void(*)(Request))fn_void;
 
-                    // ss = decode(ss);
+                    if(this->coding) ss = decode(ss);
                     Request req;
                     req.deserialize(ss);
                     // std::cout << "stub fn, size: " << req.str.size() << std::endl;
@@ -63,7 +64,8 @@ class RpcClient {
         }
 
     public: 
-        RpcClient(std::string ip, uint16_t port, int payload_size, int timeout, int windows) {
+        RpcClient(std::string ip, uint16_t port, int payload_size, int timeout, int windows, bool coding = false) {
+            this->coding = coding;
             this->client = new Client(3000, ip, payload_size, timeout, windows);
             std::function<void(std::string)> fn = std::bind(&RpcClient::rcvMsg, this, std::placeholders::_1);
             this->server = new Server(port, fn, payload_size);
@@ -76,16 +78,14 @@ class RpcClient {
 
         void call(uint8_t fn_id, std::string ss){
             std::string msg = char(fn_id) + ss;
-            // std::cout << "msg call size: " << ss.size() << std::endl;
             this->client->send(msg);
         }
 
         void sum(Request req, void* callback){
             uint8_t id = 15;
-            // printf("[%d] callback pointer: %p\n", id, callback);
             this->registerCallback(id, callback);
             std::string msg = req.serialize();
-            // msg = encode(msg);
+            if(this->coding) msg = encode(msg);
             this->call(id, msg);
         }
 };

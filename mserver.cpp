@@ -9,8 +9,8 @@ Request sum(Request req){
 
 int main(int argc, char** argv){
 
-    if(argc != 5){
-        std::cout << "Usage: ./server <ip> <timeout> <windows> <datagram>" << std::endl;
+    if(argc != 6){
+        std::cout << "Usage: ./server <ip> <timeout> <windows> <datagram> <coding>" << std::endl;
         return 0;
     }
     
@@ -18,9 +18,13 @@ int main(int argc, char** argv){
     int timeout = atoi(argv[2]);
     int windows = atoi(argv[3]);
     int datagram = atoi(argv[4]);
+    bool coding = atoi(argv[5]);
+
+    std::cout << "coding: " << coding << std::endl;
+
     omp_set_num_threads(windows);
 
-    RpcServer rpc(ip, 3000, datagram, timeout, windows);
+    RpcServer rpc(ip, 3000, datagram, timeout, windows, coding);
     rpc.registerFn(15, (void*)sum);
     getchar();
    

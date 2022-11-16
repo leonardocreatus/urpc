@@ -18,9 +18,15 @@ app.use(express.json());
 let server;
 
 app.post("/start", async (req, res) => {
-  const { ip, timeout, window, datagram } = req.body;
-  console.log("start", ip, timeout, window, datagram);
-  server = spawn(`${rpcPath}/server`, [ip, timeout, window, datagram]);
+  const { ip, timeout, window, datagram, coding } = req.body;
+  console.log("start", ip, timeout, window, datagram, coding);
+  server = spawn(`${rpcPath}/server`, [
+    ip,
+    timeout,
+    window,
+    datagram,
+    coding ? "1" : "0",
+  ]);
   server.stdout.on("data", (data) => {
     console.log(data.toString());
   });

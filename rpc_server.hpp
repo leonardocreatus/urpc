@@ -21,6 +21,7 @@ class RpcServer {
 
         Server *server;
         Client *client;
+        bool coding;
         std::map<uint8_t, void*> mapFn;
         // std::counting_semaphore<1>* sem;
 
@@ -40,7 +41,7 @@ class RpcServer {
                 case 15: {
                     std::function<Request(Request)> fn = (Request(*)(Request))mapFn[fn_id];
                     Request req;
-                    // str = decode(str);
+                    if(this->coding) str = decode(str);
                     // printf("pointer req.str.size(): %p\n", req.str);
                     // std::cout << "stub case 15" << &req.str << std::endl;
                     req.deserialize(str);
@@ -53,7 +54,7 @@ class RpcServer {
                     // std::cout << "res.str.size(): " << res.str.size() << std::endl;
                     // std::cout << "fn end" << std::endl;
                     ssres = res.serialize();
-                    // ssres = encode(ssres);
+                    if(this->coding) ssres = encode(ssres);
                 }; break;
             } 
             // std::cout << "stub end: " << ssres.size() << std::endl;
@@ -62,9 +63,10 @@ class RpcServer {
 
     public:
     
-        RpcServer(std::string ip, int port, int payload_size, int timeout, int windows) {
+        RpcServer(std::string ip, int port, int payload_size, int timeout, int windows, bool coding = false) {
             // std::cout << "payload_size: " << payload_size << std::endl;
             // this->sem = new std::counting_semaphore<1>(0);
+            this->coding = coding;
             this->client = new Client(3001, ip, payload_size, timeout, windows);
             std::function<void(std::string)> fn = std::bind(&RpcServer::rcvMsg, this, std::placeholders::_1);
             this->server = new Server(port, fn, payload_size);
