@@ -1,5 +1,6 @@
 #include "serialize.hpp"
 
+
 std::map<uint8_t, std::function<std::string(void*)>> map_type_to_serialize = {
     {INT8_T, serialize_int8_t},
     {UINT8_T, serialize_uint8_t},
@@ -39,10 +40,14 @@ std::string serialize_uint8_t(void* ptr){
 
 std::string serialize_char(void* ptr){
     std::bitset<8> bits(*(char*)ptr);
-    // return bits.to_string();
     std::string serialize_parse;
     serialize_parse += bits.to_ulong();
     return serialize_parse;
+
+    // int value = *(char*)ptr;
+    // std::string serialize_parse;
+    // serialize_parse += value;
+    // return serialize_parse;
 }
 
 std::string serialize_bool(void* ptr)
@@ -178,22 +183,34 @@ std::string serialize_double(void* ptr){
 }
 
 std::string serialize_array(void* ptr, uint8_t type, uint32_t size){
+    // omp_set_num_threads(16);
     std::string serialized;
     serialized += serialize_uint32_t(&size);
     uint8_t size_of_type = get_size(type);
     std::function<std::string(void*)> func = get_serialize_func(type);
+    // #pragma omp parallel for
+    auto start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < size; i++){
-        void* ptr_to_type = (void*)((uint8_t*)ptr + i * get_size(type) / 8);
+        // int index = omp_get_thread_num();
+        void* ptr_to_type = (void*)((uint8_t*)ptr + i * size_of_type / 8);
         serialized += func(ptr_to_type);
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    // std::cout << "serialize time: " << duration.count() << std::endl;
     return serialized;
 }
 
 std::string serialize_string(void* ptr){
+    
     std::string* str = (std::string*)ptr;
-    char c_str[str->length() + 1];
-    strcpy(c_str, str->c_str());
-    return serialize_array(c_str, CHAR, str->length());
+    // std::cout << "serialize_string: " << str->size() << std::endl;
+    // str->resize(ptr);
+
+    
+    // char *cstr = new char[str->length() + 1];
+    // strcpy(cstr, str->c_str());
+    return serialize_array(str->data(), CHAR, str->length());
 }
 
 std::string serialize_vector(void* ptr, uint8_t type){
@@ -223,6 +240,7 @@ std::string serialize_vector(void* ptr, uint8_t type){
 }
 
 std::string serialize_struct(struct metadatas* meta) {
+    // std::cout << "serialize_struct" << std::endl;
     std::string serialized = "";
 
     for(auto fields : meta->key_fields) {
@@ -232,6 +250,7 @@ std::string serialize_struct(struct metadatas* meta) {
         if(type == OBJECT){
             serialized += serialize_struct((struct metadatas*)ptr);
         } else if(type == STRING){
+            // std::cout << "serialize string" << std::endl;
             serialized += serialize_string(ptr);
         } else if(type > ARRAY){
             serialized += serialize_vector(ptr, type - ARRAY);
@@ -239,8 +258,9 @@ std::string serialize_struct(struct metadatas* meta) {
             serialized += get_serialize_func(type)(ptr);
         }
     }
-    for(int i = 0; i < serialized.size(); i++){
-        std::bitset<8> bits(serialized[i]);
-    }
+
+    // for(int i = 0; i < serialized.size(); i++){
+    //     std::bitset<8> bits(serialized[i]);
+    // }
     return serialized;
 }

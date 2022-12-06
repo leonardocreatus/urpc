@@ -4,10 +4,11 @@
 #include <fstream>
 
 void callback(std::string msg){
-    std::fstream file;
-    file.open("out.jpg", std::ios::out | std::ios::trunc | std::ios_base::binary);
-    file << msg;
-    file.close();
+    std::cout << msg.size() << std::endl;
+    // std::fstream file;
+    // file.open("out.jpg", std::ios::out | std::ios::trunc | std::ios_base::binary);
+    // file << msg;
+    // file.close();
 }
 
 int main(int argc, char** argv){
@@ -17,15 +18,23 @@ int main(int argc, char** argv){
         Server server(8888, callback, 16);
         getchar();
     }else {
-        Client client(8888, "127.0.0.1", 16, 1, 1024);
-        std::fstream file;
-        file.open("in.jpg", std::ios::in | std::ios_base::binary);
-        if(!file.is_open()){
-            std::cout << "file not open" << std::endl;
-            exit(1);
+        Client client(8888, "192.168.64.10", 1, 1, 16);
+        std::string msg;
+        int size = atoi(argv[2]);
+        std::cout << "size: " << size << std::endl;
+        for(int i = 0; i < size; i++){
+            msg += "a";
         }
-        std::string msg((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
         client.send(msg);
-        file.close();
+
+        // std::fstream file;
+        // file.open("in.jpg", std::ios::in | std::ios_base::binary);
+        // if(!file.is_open()){ 
+        //     std::cout << "file not open" << std::endl;
+        //     exit(1);
+        // }
+        // std::string msg((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+        // client.send(msg);
+        // file.close();
     }
 }

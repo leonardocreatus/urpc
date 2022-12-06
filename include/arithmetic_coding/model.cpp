@@ -26,6 +26,8 @@ int freq[No_of_symbols + 1];
 void start_outputing_bits(){
     buffer = 0;
     bits_to_go = 8;
+    out = std::stringstream();
+    in = std::stringstream();
 }
 
 /*  OUTPUT A BIT  */
